@@ -2,7 +2,6 @@
 //  BaseController.swift
 //  Xomo
 //
-
 import UIKit
 
 class BaseController: UIViewController {
@@ -15,8 +14,8 @@ class BaseController: UIViewController {
 }
 
 @objc extension BaseController {
-    
+
     func configure() {
-        view.backgroundColor = .black
+        view.backgroundColor = .systemBackground
     }
 }

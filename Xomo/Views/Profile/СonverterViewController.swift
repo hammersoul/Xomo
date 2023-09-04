@@ -11,6 +11,7 @@ class ConverterViewController: BaseController {
         super.viewDidLoad()
         
         title = "Конвертер Валют"
+        navigationController?.navigationBar.prefersLargeTitles = false
     }
 }
 

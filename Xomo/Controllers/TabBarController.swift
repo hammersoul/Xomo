@@ -65,7 +65,12 @@ final class TabBarController: UITabBarController {
         tabBar.layer.insertSublayer(roundLayer, at: 0)
         tabBar.itemPositioning = .centered
         
-        roundLayer.fillColor = UIColor.mainColor.cgColor
+        if self.traitCollection.userInterfaceStyle == .dark {
+            roundLayer.fillColor = UIColor.mainColor.cgColor
+        } else {
+            roundLayer.fillColor = UIColor.white.cgColor
+        }
+        
         tabBar.tintColor = .tabBarItemAccent
         tabBar.unselectedItemTintColor = .tabBarItemLight
     }

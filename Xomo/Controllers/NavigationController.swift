@@ -14,8 +14,7 @@ final class NavigationController: UINavigationController {
     }
     
     private func configure() {
-        view.backgroundColor = .black
-        navigationBar.isTranslucent = false
-        navigationBar.standardAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBar.isTranslucent = true
+        navigationBar.backgroundColor = .systemBackground
     }
 }

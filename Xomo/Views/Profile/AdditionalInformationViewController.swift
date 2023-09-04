@@ -11,5 +11,6 @@ class AdditionalInformationViewController: BaseController {
         super.viewDidLoad()
 
         title = "Дополнительно"
+        navigationController?.navigationBar.prefersLargeTitles = false
     }
 }

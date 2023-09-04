@@ -21,12 +21,18 @@ class ProfileViewController: BaseController {
         
         title = "Профиль"
         navigationController?.tabBarItem.title = Resources.TabBarTitle.profile
+        navigationController?.navigationBar.prefersLargeTitles = true
 
         view.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self
         
         configureModels()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     override func viewDidLayoutSubviews() {
@@ -37,31 +43,31 @@ class ProfileViewController: BaseController {
     
     private func configureModels() {
         data.append([
-            ProfileCellModel(title: "История обменников") { [weak self] in
+            ProfileCellModel(title: "История обменников", image: "clock.fill") { [weak self] in
                 self?.didTapHistory()
             },
             
-            ProfileCellModel(title: "Очистить избранное") { [weak self] in
+            ProfileCellModel(title: "Очистить избранное", image: "clear.fill") { [weak self] in
                 self?.didTapClear()
             }
         ])
         
         data.append([
-            ProfileCellModel(title: "Все обменники") { [weak self] in
+            ProfileCellModel(title: "Все обменники", image: "square.grid.3x3.middle.filled") { [weak self] in
                 self?.didTapAllExchangers()
             },
             
-            ProfileCellModel(title: "Конвертер валют") { [weak self] in
+            ProfileCellModel(title: "Конвертер валют", image: "keyboard.fill") { [weak self] in
                 self?.didTapConverter()
             }
         ])
         
         data.append([
-            ProfileCellModel(title: "О приложении") { [weak self] in
+            ProfileCellModel(title: "О приложении", image: "info.circle.fill") { [weak self] in
                 self?.didTapAbout()
             },
             
-            ProfileCellModel(title: "Дополнительная информация") { [weak self] in
+            ProfileCellModel(title: "Дополнительная информация", image: "questionmark.circle.fill") { [weak self] in
                 self?.didTapAdditionalInformation()
             }
         ])
@@ -74,7 +80,12 @@ class ProfileViewController: BaseController {
     }
     
     private func didTapClear() {
-        
+        let alert = UIAlertController(title: "Вы точно хотите очистить избранные обменники и валюты?", message: nil, preferredStyle: .alert)
+         
+        alert.addAction(UIAlertAction(title: "Очистить", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
+         
+        self.present(alert, animated: true)
     }
     
     private func didTapAllExchangers() {
@@ -109,12 +120,30 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.imageView?.image = UIImage(systemName: data[indexPath.section][indexPath.row].image)
         cell.textLabel?.text = data[indexPath.section][indexPath.row].title
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         data[indexPath.section][indexPath.row].handler()
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection
+                                section: Int) -> String? {
+        if section == 0 {
+            return "Ваши данные"
+        } else if section == 1 {
+            return "Операции с валютами"
+        } else {
+            return "Дополнительно"
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let header = view as! UITableViewHeaderFooterView
+        header.textLabel?.font =  UIFont.boldSystemFont(ofSize: 15.0)
     }
 }

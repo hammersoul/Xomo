@@ -12,5 +12,6 @@ class CurrenciesViewController: BaseController {
         
         title = "Курсы Валют"
         navigationController?.tabBarItem.title = Resources.TabBarTitle.currencies
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
 }

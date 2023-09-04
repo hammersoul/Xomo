@@ -12,5 +12,6 @@ class NewsViewController: BaseController {
         
         title = "Новости"
         navigationController?.tabBarItem.title = Resources.TabBarTitle.news
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
 }

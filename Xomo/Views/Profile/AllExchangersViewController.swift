@@ -11,5 +11,6 @@ class AllExchangersViewController: BaseController {
         super.viewDidLoad()
         
         title = "Все обменники"
+        navigationController?.navigationBar.prefersLargeTitles = false
     }
 }

@@ -11,5 +11,6 @@ class AboutViewController: BaseController {
         super.viewDidLoad()
 
         title = "О приложении"
+        navigationController?.navigationBar.prefersLargeTitles = false
     }
 }

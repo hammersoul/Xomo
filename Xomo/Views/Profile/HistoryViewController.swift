@@ -11,5 +11,6 @@ class HistoryViewController: BaseController {
         super.viewDidLoad()
 
         title = "История"
+        navigationController?.navigationBar.prefersLargeTitles = false
     }
 }
