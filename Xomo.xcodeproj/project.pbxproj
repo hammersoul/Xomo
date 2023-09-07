@@ -12,7 +12,13 @@
 		7138D98C2AA2029900F855D8 /* AllExchangersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7138D98B2AA2029900F855D8 /* AllExchangersViewController.swift */; };
 		7138D98E2AA2031000F855D8 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7138D98D2AA2031000F855D8 /* AboutViewController.swift */; };
 		7138D9902AA2034200F855D8 /* AdditionalInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7138D98F2AA2034200F855D8 /* AdditionalInformationViewController.swift */; };
+		7141558C2AAA0D1D00A743DC /* UIScrollView_InfiniteScroll in Frameworks */ = {isa = PBXBuildFile; productRef = 7141558B2AAA0D1D00A743DC /* UIScrollView_InfiniteScroll */; };
+		714155922AAA1EDC00A743DC /* CurrenciesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 714155902AAA1EDC00A743DC /* CurrenciesTableViewCell.swift */; };
+		714155932AAA1EDC00A743DC /* CurrenciesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 714155912AAA1EDC00A743DC /* CurrenciesTableViewCell.xib */; };
 		718D0FF52AA3117500456747 /* BaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718D0FF42AA3117500456747 /* BaseController.swift */; };
+		718F411C2AA614F400605509 /* ParseNews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718F411B2AA614F400605509 /* ParseNews.swift */; };
+		718F411F2AA6152400605509 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 718F411E2AA6152400605509 /* SwiftSoup */; };
+		718F41212AA6189600605509 /* NewsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718F41202AA6189600605509 /* NewsModel.swift */; };
 		7197A4D12A9B50CE0038091A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7197A4D02A9B50CE0038091A /* AppDelegate.swift */; };
 		7197A4D32A9B50CE0038091A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7197A4D22A9B50CE0038091A /* SceneDelegate.swift */; };
 		7197A4D52A9B50CE0038091A /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7197A4D42A9B50CE0038091A /* HomeViewController.swift */; };
@@ -35,7 +41,11 @@
 		7138D98B2AA2029900F855D8 /* AllExchangersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllExchangersViewController.swift; sourceTree = "<group>"; };
 		7138D98D2AA2031000F855D8 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		7138D98F2AA2034200F855D8 /* AdditionalInformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalInformationViewController.swift; sourceTree = "<group>"; };
+		714155902AAA1EDC00A743DC /* CurrenciesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrenciesTableViewCell.swift; sourceTree = "<group>"; };
+		714155912AAA1EDC00A743DC /* CurrenciesTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CurrenciesTableViewCell.xib; sourceTree = "<group>"; };
 		718D0FF42AA3117500456747 /* BaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseController.swift; sourceTree = "<group>"; };
+		718F411B2AA614F400605509 /* ParseNews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseNews.swift; sourceTree = "<group>"; };
+		718F41202AA6189600605509 /* NewsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsModel.swift; sourceTree = "<group>"; };
 		7197A4CD2A9B50CE0038091A /* Xomo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Xomo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7197A4D02A9B50CE0038091A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7197A4D22A9B50CE0038091A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -59,6 +69,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				718F411F2AA6152400605509 /* SwiftSoup in Frameworks */,
+				7141558C2AAA0D1D00A743DC /* UIScrollView_InfiniteScroll in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,6 +85,15 @@
 				718D0FF42AA3117500456747 /* BaseController.swift */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		7141558D2AAA169800A743DC /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				714155902AAA1EDC00A743DC /* CurrenciesTableViewCell.swift */,
+				714155912AAA1EDC00A743DC /* CurrenciesTableViewCell.xib */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		7197A4C42A9B50CE0038091A = {
@@ -108,6 +129,7 @@
 			isa = PBXGroup;
 			children = (
 				71A5F76E2A9DBF2D00B353C1 /* ProfileCellModel.swift */,
+				718F41202AA6189600605509 /* NewsModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -115,6 +137,7 @@
 		7197A4E52A9B52820038091A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				7141558D2AAA169800A743DC /* Cells */,
 				7197A4F02A9B5A500038091A /* TabBarController */,
 				7197A4F12A9B5AD60038091A /* Profile */,
 			);
@@ -124,6 +147,7 @@
 		7197A4E62A9B528E0038091A /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				718F411B2AA614F400605509 /* ParseNews.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -189,6 +213,10 @@
 			dependencies = (
 			);
 			name = Xomo;
+			packageProductDependencies = (
+				718F411E2AA6152400605509 /* SwiftSoup */,
+				7141558B2AAA0D1D00A743DC /* UIScrollView_InfiniteScroll */,
+			);
 			productName = Xomo;
 			productReference = 7197A4CD2A9B50CE0038091A /* Xomo.app */;
 			productType = "com.apple.product-type.application";
@@ -217,6 +245,10 @@
 				Base,
 			);
 			mainGroup = 7197A4C42A9B50CE0038091A;
+			packageReferences = (
+				718F411D2AA6152400605509 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+				7141558A2AAA0D1D00A743DC /* XCRemoteSwiftPackageReference "UIScrollView-InfiniteScroll" */,
+			);
 			productRefGroup = 7197A4CE2A9B50CE0038091A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -233,6 +265,7 @@
 			files = (
 				7197A4DD2A9B50D00038091A /* LaunchScreen.storyboard in Resources */,
 				7197A4DA2A9B50D00038091A /* Assets.xcassets in Resources */,
+				714155932AAA1EDC00A743DC /* CurrenciesTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,6 +276,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				718F41212AA6189600605509 /* NewsModel.swift in Sources */,
 				7197A4ED2A9B595C0038091A /* CurrenciesViewController.swift in Sources */,
 				7197A4D52A9B50CE0038091A /* HomeViewController.swift in Sources */,
 				7138D98A2AA1F04F00F855D8 /* Resources.swift in Sources */,
@@ -250,6 +284,7 @@
 				71E94B222A9F57E400A9B8D4 /* HistoryViewController.swift in Sources */,
 				7197A4D12A9B50CE0038091A /* AppDelegate.swift in Sources */,
 				7197A4F72A9B5B520038091A /* ProfileViewController.swift in Sources */,
+				714155922AAA1EDC00A743DC /* CurrenciesTableViewCell.swift in Sources */,
 				7197A4EB2A9B55780038091A /* TabBarController.swift in Sources */,
 				7138D98E2AA2031000F855D8 /* AboutViewController.swift in Sources */,
 				7197A4F32A9B5B1A0038091A /* NewsViewController.swift in Sources */,
@@ -259,6 +294,7 @@
 				7138D9842AA1E4DC00F855D8 /* NavigationController.swift in Sources */,
 				7197A4D32A9B50CE0038091A /* SceneDelegate.swift in Sources */,
 				7197A4EF2A9B597C0038091A /* СonverterViewController.swift in Sources */,
+				718F411C2AA614F400605509 /* ParseNews.swift in Sources */,
 				7138D9902AA2034200F855D8 /* AdditionalInformationViewController.swift in Sources */,
 				7197A4FA2A9B5DDF0038091A /* UIColor.swift in Sources */,
 			);
@@ -472,6 +508,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7141558A2AAA0D1D00A743DC /* XCRemoteSwiftPackageReference "UIScrollView-InfiniteScroll" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pronebird/UIScrollView-InfiniteScroll";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		718F411D2AA6152400605509 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7141558B2AAA0D1D00A743DC /* UIScrollView_InfiniteScroll */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7141558A2AAA0D1D00A743DC /* XCRemoteSwiftPackageReference "UIScrollView-InfiniteScroll" */;
+			productName = UIScrollView_InfiniteScroll;
+		};
+		718F411E2AA6152400605509 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 718F411D2AA6152400605509 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7197A4C52A9B50CE0038091A /* Project object */;
 }
