@@ -17,5 +17,6 @@ class BaseController: UIViewController {
 
     func configure() {
         view.backgroundColor = .systemBackground
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
 }

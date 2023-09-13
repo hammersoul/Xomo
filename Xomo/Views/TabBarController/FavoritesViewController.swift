@@ -12,6 +12,5 @@ class FavoritesViewController: BaseController {
         
         title = "Избранное"
         navigationController?.tabBarItem.title = Resources.TabBarTitle.favorites
-        navigationController?.navigationBar.prefersLargeTitles = true
     }
 }

@@ -20,7 +20,7 @@ final class TabBarController: UITabBarController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.selectedViewController = self.viewControllers![2]
+        self.selectedViewController = self.viewControllers![0]
     }
     
     private func configure() {
@@ -71,7 +71,6 @@ final class TabBarController: UITabBarController {
             roundLayer.fillColor = UIColor.white.cgColor
         }
         
-        tabBar.tintColor = .tabBarItemAccent
         tabBar.unselectedItemTintColor = .tabBarItemLight
     }
 }

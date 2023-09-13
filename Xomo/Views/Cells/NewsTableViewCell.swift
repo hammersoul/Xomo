@@ -1,12 +1,11 @@
 //
-//  CurrenciesTableViewCell.swift
+//  NewsTableViewCell.swift
 //  Xomo
 //
 
-
 import UIKit
 
-class CurrenciesTableViewCell: UITableViewCell {
+class NewsTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -18,5 +17,5 @@ class CurrenciesTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    
+
 }

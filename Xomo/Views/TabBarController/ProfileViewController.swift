@@ -22,7 +22,6 @@ class ProfileViewController: BaseController {
         
         title = "Профиль"
         navigationController?.tabBarItem.title = Resources.TabBarTitle.profile
-        navigationController?.navigationBar.prefersLargeTitles = true
 
         view.addSubview(tableView)
         tableView.delegate = self

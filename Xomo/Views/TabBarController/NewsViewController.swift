@@ -33,7 +33,6 @@ class NewsViewController: BaseController {
         
         title = "Новости"
         navigationController?.tabBarItem.title = Resources.TabBarTitle.news
-        navigationController?.navigationBar.prefersLargeTitles = true
         
         addSubview()
         tableSetUp()
@@ -117,4 +116,3 @@ extension NewsViewController: UITableViewDelegate, UITableViewDataSource, UIScro
         }
     }
 }
-

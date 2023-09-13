@@ -12,7 +12,6 @@ class HomeViewController: BaseController {
         
         title = "Обменники"
         navigationController?.tabBarItem.title = Resources.TabBarTitle.home
-        navigationController?.navigationBar.prefersLargeTitles = true
         
 //        let label = UILabel()
 //        label.textColor = UIColor.white
