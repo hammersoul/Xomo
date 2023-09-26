@@ -5,7 +5,7 @@
 
 import Foundation
 
-struct CurrenciesModel {
+struct CurrencyModel {
     let name: String
     let ticker: String
     let priceOne: String

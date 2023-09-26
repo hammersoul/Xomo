@@ -1,13 +1,15 @@
 //
-//  CurranciesTableViewCell.swift
+//  HomeTableViewCell.swift
 //  Xomo
 //
 
 import UIKit
 
-class CurranciesTableViewCell: UITableViewCell {
+class HomeTableViewCell: UITableViewCell {
     
-    static let identifier = "CurranciesTableViewCell"
+    static let identifier = "HomeTableViewCell"
+    
+    // MARK: UI
     
     private let containerView: UIView = {
         let view = UIView()
@@ -15,7 +17,7 @@ class CurranciesTableViewCell: UITableViewCell {
         
         return view
     }()
-
+    
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 18.0)
@@ -24,37 +26,29 @@ class CurranciesTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let tickerLabel: UILabel = {
+    private let reserveLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 16.0)
+        label.font = UIFont.systemFont(ofSize: 16.0)
         label.textColor = UIColor.tabBarItemLight
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
     }()
     
-    private let priceLabelOne: UILabel = {
+    private let giveLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 18.0)
+        label.font = UIFont.boldSystemFont(ofSize: 14.0)
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
     }()
     
-    private let priceLabelTwo: UILabel = {
+    private let receiveLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 16.0)
+        label.font = UIFont.boldSystemFont(ofSize: 14.0)
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
-    }()
-    
-    private let saveButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(systemName: "bookmark", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30)), for: .normal)
-        
-        return button
     }()
     
     private let hStackView: UIStackView = {
@@ -63,7 +57,7 @@ class CurranciesTableViewCell: UITableViewCell {
         stackView.axis = .horizontal
         stackView.alignment = .center
         stackView.spacing = 8
-                
+        
         return stackView
     }()
     
@@ -83,30 +77,28 @@ class CurranciesTableViewCell: UITableViewCell {
         stackView.axis = .vertical
         stackView.alignment = .center
         stackView.distribution = .fillEqually
-                
+        
         return stackView
     }()
     
-    private let vStackViewThree: UIStackView = {
-        let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.alignment = .center
-                
-        return stackView
-    }()
+    // MARK: Subview
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        containerView.frame = contentView.bounds
-                
-        addSubview()
-        setupLayout()
+    private func addSubview() {
+        containerView.addSubview(hStackView)
+        
+        hStackView.addArrangedSubview(vStackViewOne)
+        hStackView.addArrangedSubview(vStackViewTwo)
+        
+        vStackViewOne.addArrangedSubview(nameLabel)
+        vStackViewOne.addArrangedSubview(reserveLabel)
+        
+        vStackViewTwo.addArrangedSubview(giveLabel)
+        vStackViewTwo.addArrangedSubview(receiveLabel)
+        
+        contentView.addSubview(containerView)
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    // MARK: Layout Constraint
     
     private func setupLayout() {
         NSLayoutConstraint.activate([
@@ -118,47 +110,37 @@ class CurranciesTableViewCell: UITableViewCell {
             hStackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 0),
             hStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
             hStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 0),
-            hStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 0),
+            hStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -8),
             
             vStackViewOne.topAnchor.constraint(equalTo: hStackView.topAnchor, constant: 0),
             vStackViewOne.bottomAnchor.constraint(equalTo: hStackView.bottomAnchor, constant: 0),
             vStackViewTwo.topAnchor.constraint(equalTo: hStackView.topAnchor, constant: 0),
             vStackViewTwo.bottomAnchor.constraint(equalTo: hStackView.bottomAnchor, constant: 0),
-            vStackViewThree.topAnchor.constraint(equalTo: hStackView.topAnchor, constant: 0),
-            vStackViewThree.bottomAnchor.constraint(equalTo: hStackView.bottomAnchor, constant: 0),
             
             vStackViewOne.widthAnchor.constraint(equalToConstant: containerView.frame.width / 2.0),
-            vStackViewTwo.widthAnchor.constraint(equalToConstant: containerView.frame.width / 2.5),
-         ])
+        ])
     }
     
-    private func addSubview() {
-        containerView.addSubview(hStackView)
-        hStackView.addArrangedSubview(vStackViewOne)
-        hStackView.addArrangedSubview(vStackViewTwo)
-        hStackView.addArrangedSubview(vStackViewThree)
-        
-        vStackViewOne.addArrangedSubview(nameLabel)
-        vStackViewOne.addArrangedSubview(tickerLabel)
-        
-        vStackViewTwo.addArrangedSubview(priceLabelOne)
-        vStackViewTwo.addArrangedSubview(priceLabelTwo)
-        
-        vStackViewThree.addArrangedSubview(saveButton)
-        
-        contentView.addSubview(containerView)
+    // MARK: Setup Cell
+    
+    func setup(exchanger: ExchangerModel) {
+        nameLabel.text = exchanger.name
+        giveLabel.text = exchanger.give
+        receiveLabel.text = exchanger.receive
+        reserveLabel.text = exchanger.reserve
     }
     
-    func setup(currency: CurrenciesModel) {
-        nameLabel.text = currency.name
-        tickerLabel.text = currency.ticker
-        priceLabelOne.text = currency.priceOne
-        priceLabelTwo.text = currency.priceTwo
+    // MARK: Init
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        containerView.frame = contentView.bounds
         
-        if currency.priceTwo.first == "-" {
-            priceLabelTwo.textColor = #colorLiteral(red: 0.7882352941, green: 0.3215686275, blue: 0.3647058824, alpha: 1)
-        } else {
-            priceLabelTwo.textColor = #colorLiteral(red: 0.2862745098, green: 0.6392156863, blue: 0.6705882353, alpha: 1)
-        }
+        addSubview()
+        setupLayout()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

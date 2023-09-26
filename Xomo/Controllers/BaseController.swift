@@ -5,16 +5,16 @@
 import UIKit
 
 class BaseController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         configure()
     }
 }
 
 @objc extension BaseController {
-
+    
     func configure() {
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true

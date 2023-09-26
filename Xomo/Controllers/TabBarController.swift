@@ -7,21 +7,12 @@ import UIKit
 
 final class TabBarController: UITabBarController {
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        
-        configure()
-        setTabBarAppearance()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.selectedViewController = self.viewControllers![0]
+        self.selectedViewController = self.viewControllers![4]
     }
+    
+    // MARK: Configure TabBarController
     
     private func configure() {
         let largeConfig = UIImage.SymbolConfiguration(pointSize: 20)
@@ -38,11 +29,11 @@ final class TabBarController: UITabBarController {
         let favoritesNavigation = NavigationController(rootViewController: favoritesController)
         let profileNavigation = NavigationController(rootViewController: profileController)
         
-        currenciesNavigation.tabBarItem = UITabBarItem(title: Resources.TabBarTitle.currencies, image: UIImage(systemName: "personalhotspot.circle.fill", withConfiguration: largeConfig), tag: 0)
-        newsNavigation.tabBarItem = UITabBarItem(title: Resources.TabBarTitle.news, image: UIImage(systemName: "doc.plaintext.fill", withConfiguration: largeConfig), tag: 0)
-        homeNavigation.tabBarItem = UITabBarItem(title: Resources.TabBarTitle.home, image: UIImage(systemName: "location.fill", withConfiguration: largeConfig), tag: 0)
-        favoritesNavigation.tabBarItem = UITabBarItem(title: Resources.TabBarTitle.favorites, image: UIImage(systemName: "bookmark.fill", withConfiguration: largeConfig), tag: 0)
-        profileNavigation.tabBarItem = UITabBarItem(title: Resources.TabBarTitle.profile, image: UIImage(systemName: "person.fill", withConfiguration: largeConfig), tag: 0)
+        currenciesNavigation.tabBarItem = UITabBarItem(title: Resources.MenuTitle.currencies, image: UIImage(systemName: "bitcoinsign.circle.fill", withConfiguration: largeConfig), tag: 0)
+        newsNavigation.tabBarItem = UITabBarItem(title: Resources.MenuTitle.news, image: UIImage(systemName: "doc.plaintext.fill", withConfiguration: largeConfig), tag: 0)
+        homeNavigation.tabBarItem = UITabBarItem(title: Resources.MenuTitle.home, image: UIImage(systemName: "location.fill", withConfiguration: largeConfig), tag: 0)
+        favoritesNavigation.tabBarItem = UITabBarItem(title: Resources.MenuTitle.favorites, image: UIImage(systemName: "bookmark.fill", withConfiguration: largeConfig), tag: 0)
+        profileNavigation.tabBarItem = UITabBarItem(title: Resources.MenuTitle.profile, image: UIImage(systemName: "person.fill", withConfiguration: largeConfig), tag: 0)
         
         setViewControllers([
             currenciesNavigation,
@@ -53,12 +44,12 @@ final class TabBarController: UITabBarController {
         ], animated: false)
     }
     
-    private func setTabBarAppearance() {
+    // MARK: Appearance TabBarController
+    
+    private func appearanceTabBarController() {
         let width = tabBar.bounds.width
         let height = tabBar.bounds.height + 40
-        
         let roundLayer = CAShapeLayer()
-        
         let bezierPath = UIBezierPath(roundedRect: CGRect(x: 0, y: tabBar.bounds.minY - 10, width: width, height: height), cornerRadius: 10)
         
         roundLayer.path = bezierPath.cgPath
@@ -72,5 +63,18 @@ final class TabBarController: UITabBarController {
         }
         
         tabBar.unselectedItemTintColor = .tabBarItemLight
+    }
+    
+    // MARK: Init
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        
+        configure()
+        appearanceTabBarController()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

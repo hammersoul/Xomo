@@ -4,8 +4,13 @@
 //
 
 import UIKit
+import SafariServices
 
 class ProfileViewController: BaseController {
+    
+    private var data = [[ProfileCellModel]]()
+    
+    // MARK: UI
     
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -15,15 +20,15 @@ class ProfileViewController: BaseController {
         return tableView
     }()
     
-    private var data = [[ProfileCellModel]]()
-
+    // MARK: ViewDidLoad
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = "Профиль"
-        navigationController?.tabBarItem.title = Resources.TabBarTitle.profile
-
+        navigationController?.tabBarItem.title = Resources.MenuTitle.profile
         view.addSubview(tableView)
+        
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -35,11 +40,15 @@ class ProfileViewController: BaseController {
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     
+    // MARK: Layout Constraint
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         tableView.frame = view.bounds
     }
+    
+    // MARK: Configure Models
     
     private func configureModels() {
         data.append([
@@ -73,6 +82,8 @@ class ProfileViewController: BaseController {
         ])
     }
     
+    // MARK: Menu
+    
     private func didTapHistory() {
         let vc = HistoryViewController()
         navigationController?.pushViewController(vc, animated: true)
@@ -81,10 +92,10 @@ class ProfileViewController: BaseController {
     
     private func didTapClear() {
         let alert = UIAlertController(title: "Вы точно хотите очистить избранные обменники и валюты?", message: nil, preferredStyle: .alert)
-         
+        
         alert.addAction(UIAlertAction(title: "Очистить", style: .default, handler: nil))
         alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
-         
+        
         self.present(alert, animated: true)
     }
     
@@ -99,22 +110,26 @@ class ProfileViewController: BaseController {
     }
     
     private func didTapAbout() {
-        let vc = AboutViewController()
-        navigationController?.pushViewController(vc, animated: true)
+        let safariViewController = SFSafariViewController(url: URL(string: "https://wellcrypto.io/ru/about/")!)
+        present(safariViewController, animated: true, completion: nil)
     }
     
     private func didTapAdditionalInformation() {
-        let vc = AdditionalInformationViewController()
+        let vc = AdditionalInformation()
         navigationController?.pushViewController(vc, animated: true)
     }
 }
 
+// MARK: Extension
+
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
+        
         return data.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         return data[section].count
     }
     
@@ -131,8 +146,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         data[indexPath.section][indexPath.row].handler()
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection
-                                section: Int) -> String? {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section == 0 {
             return "Ваши данные"
         } else if section == 1 {
@@ -144,6 +158,6 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let header = view as! UITableViewHeaderFooterView
-        header.textLabel?.font =  UIFont.boldSystemFont(ofSize: 15.0)
+        header.textLabel?.font =  UIFont.boldSystemFont(ofSize: 13.0)
     }
 }

@@ -1,16 +1,14 @@
 //
-//  NewsViewController.swift
+//  AdditionalInformation.swift
 //  Xomo
 //
 
 import UIKit
 import SafariServices
-import UIScrollView_InfiniteScroll
 
-class NewsViewController: BaseController {
+class AdditionalInformation: BaseController {
     
-    let service = ParseNews.shared
-    var pageCount = 1
+    let service = ParseInfo.shared
     
     // MARK: UI
     
@@ -18,16 +16,9 @@ class NewsViewController: BaseController {
     
     private let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.identifier)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
         return tableView
-    }()
-    
-    private let refreshControl: UIRefreshControl = {
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refresh(sender:)), for: .valueChanged)
-        
-        return refreshControl
     }()
     
     // MARK: ViewDidLoad
@@ -35,8 +26,8 @@ class NewsViewController: BaseController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Новости"
-        navigationController?.tabBarItem.title = Resources.MenuTitle.news
+        title = "Дополнительно"
+        navigationController?.navigationBar.prefersLargeTitles = false
         
         addSubview()
         setupTableView()
@@ -46,7 +37,6 @@ class NewsViewController: BaseController {
     
     private func addSubview() {
         view.addSubview(tableView)
-        tableView.addSubview(refreshControl)
     }
     
     // MARK: Layout Constraint
@@ -72,41 +62,23 @@ class NewsViewController: BaseController {
                 self.spinner.stopAnimating()
             }
         }
-        
-        tableView.infiniteScrollDirection = .vertical
-        tableView.addInfiniteScroll { table in
-            if self.pageCount <= 50 {
-                self.pageCount += 1
-                
-                self.service.parse(completion: { _ in
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                        table.finishInfiniteScroll()
-                    }
-                }, page: String(self.pageCount))
-            } else {
-                table.finishInfiniteScroll()
-            }
-        }
-    }
-    
-    @objc private func refresh(sender: UIRefreshControl) {
-        tableView.reloadData()
-        sender.endRefreshing()
     }
 }
 
 // MARK: Extension
 
-extension NewsViewController: UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
+extension AdditionalInformation: UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return service.news.count
+        return service.info.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier, for: indexPath) as! NewsTableViewCell
-        cell.setup(news: service.news[indexPath.row])
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        
+        cell.textLabel?.text = service.info[indexPath.row].title
+        cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 16.0)
+        cell.textLabel?.numberOfLines = 0
         
         return cell
     }
@@ -119,7 +91,7 @@ extension NewsViewController: UITableViewDelegate, UITableViewDataSource, UIScro
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if let url = URL(string: service.news[indexPath.row].url) {
+        if let url = URL(string: service.info[indexPath.row].url) {
             let safariViewController = SFSafariViewController(url: url)
             present(safariViewController, animated: true, completion: nil)
         }
