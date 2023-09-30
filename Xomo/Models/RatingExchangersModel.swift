@@ -5,7 +5,7 @@
 
 import Foundation
 
-struct AllExchangerModel {
+struct RatingExchangersModel {
     let name: String
     let reserve: String
     let status: String

@@ -5,7 +5,7 @@
 
 import UIKit
 
-class AllExchangersTableViewCell: UITableViewCell {
+class RatingExchangersTableViewCell: UITableViewCell {
     
     static let identifier = "AllExchangersTableViewCell"
     
@@ -145,7 +145,7 @@ class AllExchangersTableViewCell: UITableViewCell {
     
     // MARK: Setup Cell
     
-    func setup(exchanger: AllExchangerModel) {
+    func setup(exchanger: RatingExchangersModel) {
         nameLabel.text = exchanger.name
         statusLabel.text = exchanger.status
         reserveLabel.text = exchanger.reserve

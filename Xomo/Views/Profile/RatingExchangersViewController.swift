@@ -8,7 +8,7 @@ import SafariServices
 
 class AllExchangersViewController: BaseController {
     
-    let service = ParseAllExchangers.shared
+    let service = ParseRatingExchangers.shared
     
     // MARK: UI
     

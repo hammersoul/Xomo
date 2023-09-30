@@ -11,11 +11,11 @@ final class ParseAllExchangers {
     static let shared = ParseAllExchangers()
     
     var url = "https://wellcrypto.io/ru/exchangers/"
-    public var allExchangers = [AllExchangerModel]()
+    public var allExchangers = [RatingExchangersModel]()
     
     // MARK: All Exchanges Parsing
     
-    func parse(completion: @escaping (([AllExchangerModel]) -> Void)) {
+    func parse(completion: @escaping (([RatingExchangersModel]) -> Void)) {
         DispatchQueue.global().asyncAfter(deadline: .now()) { [weak self] in
             if let url = URL(string: self!.url) {
                 do {
@@ -28,7 +28,7 @@ final class ParseAllExchangers {
                     let elementReviews: Elements = try document.getElementsByClass("exchange__feedback").select("a").select("span")
                     
                     for index in 0..<elementsName.count {
-                        let exchanger = try AllExchangerModel(name: elementsName[index].text(), reserve: "Резерв: " + elementReserve[index].text(), status: elementStatus[index].text(), reviews: "Отзывы: " + elementReviews[index].text(), url: "https://wellcrypto.io" + elementsName[index].attr("href"))
+                        let exchanger = try RatingExchangersModel(name: elementsName[index].text(), reserve: "Резерв: " + elementReserve[index].text(), status: elementStatus[index].text(), reviews: "Отзывы: " + elementReviews[index].text(), url: "https://wellcrypto.io" + elementsName[index].attr("href"))
                         
                         self?.allExchangers.append(exchanger)
                     }
