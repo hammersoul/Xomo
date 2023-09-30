@@ -52,12 +52,12 @@ class ProfileViewController: BaseController {
     
     private func configureModels() {
         data.append([
-            ProfileCellModel(title: "История обменников", image: "clock.fill") { [weak self] in
-                self?.didTapHistory()
+            ProfileCellModel(title: "Избранные обменники", image: "bookmark.fill") { [weak self] in
+                self?.didTapFavoritesExchanges()
             },
             
-            ProfileCellModel(title: "Очистить избранное", image: "clear.fill") { [weak self] in
-                self?.didTapClear()
+            ProfileCellModel(title: "Избранные валюты", image: "bookmark.fill") { [weak self] in
+                self?.didTapFavoritesCurrencies()
             }
         ])
         
@@ -84,8 +84,14 @@ class ProfileViewController: BaseController {
     
     // MARK: Menu
     
-    private func didTapHistory() {
-        let vc = HistoryViewController()
+    private func didTapFavoritesExchanges(){
+        let vc = FavoritesExchangersViewController()
+        navigationController?.pushViewController(vc, animated: true)
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Профиль", style: .plain, target: nil, action: nil)
+    }
+    
+    private func didTapFavoritesCurrencies(){
+        let vc = FavoritesCurrenciesViewController()
         navigationController?.pushViewController(vc, animated: true)
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Профиль", style: .plain, target: nil, action: nil)
     }
@@ -100,7 +106,7 @@ class ProfileViewController: BaseController {
     }
     
     private func didTapAllExchangers() {
-        let vc = AllExchangersViewController()
+        let vc = RatingExchangersViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
     

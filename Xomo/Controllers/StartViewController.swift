@@ -86,15 +86,6 @@ class StartViewController: UIViewController {
         view.addSubview(vStackView)
     }
     
-    private func addSubviewTwo() {
-        vStackView.addArrangedSubview(imageView)
-        vStackView.addArrangedSubview(titleLabel)
-        vStackView.addArrangedSubview(textLabel)
-        vStackView.addArrangedSubview(continueButton)
-        
-        view.addSubview(vStackView)
-    }
-    
     // MARK: Layout Constraint
     
     private func setupLayout() {

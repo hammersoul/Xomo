@@ -269,7 +269,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource, UIScro
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.identifier, for: indexPath) as! HomeTableViewCell
-        cell.setup(exchanger: service.exchangers[indexPath.row])
+        cell.setupHome(exchanger: service.exchangers[indexPath.row])
         
         return cell
     }
@@ -284,6 +284,8 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource, UIScro
         tableView.deselectRow(at: indexPath, animated: true)
         
         if let url = URL(string: service.exchangers[indexPath.row].url) {
+            ContextDB.shared.createHistory(name:service.exchangers[indexPath.row].name, give: service.exchangers[indexPath.row].give, receive: service.exchangers[indexPath.row].receive, reserve: service.exchangers[indexPath.row].reserve, url: service.exchangers[indexPath.row].url)
+            
             let safariViewController = SFSafariViewController(url: url)
             present(safariViewController, animated: true, completion: nil)
         }

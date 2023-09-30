@@ -8,13 +8,15 @@ import Foundation
 struct CurrencyModel {
     let name: String
     let ticker: String
-    let priceOne: String
-    let priceTwo: String
+    let price: String
+    let change: String
+    let url: String
     
-    init(name: String, ticker: String, priceOne: String, priceTwo: String) {
+    init(name: String, ticker: String, price: String, change: String, url: String) {
         self.name = name
         self.ticker = ticker
-        self.priceOne = priceOne
-        self.priceTwo = priceTwo
+        self.price = price
+        self.change = change
+        self.url = url
     }
 }

@@ -6,14 +6,14 @@
 import Foundation
 import SwiftSoup
 
-final class ParseAllExchangers {
+final class ParseRatingExchangers {
     
-    static let shared = ParseAllExchangers()
+    static let shared = ParseRatingExchangers()
     
     var url = "https://wellcrypto.io/ru/exchangers/"
-    public var allExchangers = [RatingExchangersModel]()
+    public var ratingExchangers = [RatingExchangersModel]()
     
-    // MARK: All Exchanges Parsing
+    // MARK: Rating Exchanges Parsing
     
     func parse(completion: @escaping (([RatingExchangersModel]) -> Void)) {
         DispatchQueue.global().asyncAfter(deadline: .now()) { [weak self] in
@@ -30,10 +30,10 @@ final class ParseAllExchangers {
                     for index in 0..<elementsName.count {
                         let exchanger = try RatingExchangersModel(name: elementsName[index].text(), reserve: "Резерв: " + elementReserve[index].text(), status: elementStatus[index].text(), reviews: "Отзывы: " + elementReviews[index].text(), url: "https://wellcrypto.io" + elementsName[index].attr("href"))
                         
-                        self?.allExchangers.append(exchanger)
+                        self?.ratingExchangers.append(exchanger)
                     }
                     
-                    completion(self?.allExchangers ?? [])
+                    completion(self?.ratingExchangers ?? [])
                 } catch {
                     print("Error get exchangers")
                 }

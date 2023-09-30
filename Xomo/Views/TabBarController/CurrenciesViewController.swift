@@ -71,22 +71,6 @@ class CurrenciesViewController: BaseController {
                 self.spinner.stopAnimating()
             }
         }
-        
-        tableView.infiniteScrollDirection = .vertical
-        tableView.addInfiniteScroll { table in
-            if self.pageCount <= 300 {
-                self.pageCount += 1
-                
-                self.service.parse(completion: { _ in
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                        table.finishInfiniteScroll()
-                    }
-                }, page: String(self.pageCount))
-            } else {
-                table.finishInfiniteScroll()
-            }
-        }
     }
     
     @objc private func refresh(sender: UIRefreshControl) {
@@ -106,7 +90,19 @@ extension CurrenciesViewController: UITableViewDelegate, UITableViewDataSource, 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CurrancyTableViewCell.identifier, for: indexPath) as! CurrancyTableViewCell
         cell.selectionStyle = .none
-        cell.setup(currency: service.currencies[indexPath.row])
+        
+        let checkCurrency = ContextDB.shared.checkCurrency(ticker: service.currencies[indexPath.row].ticker)
+        
+        cell.setup(name: service.currencies[indexPath.row].name, ticker: service.currencies[indexPath.row].ticker, price: service.currencies[indexPath.row].price, change: service.currencies[indexPath.row].change, checkButton: checkCurrency)
+        cell.saveButtonClick = { [self] in
+            if checkCurrency {
+                ContextDB.shared.deleteCurrency(ticker: service.currencies[indexPath.row].ticker)
+            } else {
+                ContextDB.shared.createCurrency(currency: service.currencies[indexPath.row])
+            }
+            
+            tableView.reloadData()
+        }
         
         return cell
     }

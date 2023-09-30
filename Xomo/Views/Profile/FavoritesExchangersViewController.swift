@@ -14,7 +14,7 @@ class FavoritesExchangersViewController: BaseController {
     
     private let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.identifier)
+        tableView.register(RatingExchangersTableViewCell.self, forCellReuseIdentifier: RatingExchangersTableViewCell.identifier)
         tableView.rowHeight = 70
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -33,7 +33,7 @@ class FavoritesExchangersViewController: BaseController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Избранные Обменники"
+        title = "Твои Обменники"
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Очистить", style: .plain, target: self, action: #selector(deletetTapped))
         
@@ -68,10 +68,10 @@ class FavoritesExchangersViewController: BaseController {
     }
     
     @objc func deletetTapped() {
-        let alert = UIAlertController(title: "Вы точно хотите очистить историю переходов на обменники?", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Вы точно хотите очистить избранные обменники?", message: nil, preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "Очистить", style: .default, handler: { [self]_ in 
-            ContextDB.shared.deleteAllHistory()
+            ContextDB.shared.deleteAllExchangers()
             tableView.reloadData()
         }))
         alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
@@ -85,12 +85,19 @@ class FavoritesExchangersViewController: BaseController {
 extension FavoritesExchangersViewController: UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return ContextDB.shared.allHistory().count
+        return ContextDB.shared.allRatingExchangers().count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.identifier, for: indexPath) as! HomeTableViewCell
-        cell.setupHistory(exchanger: ContextDB.shared.allHistory()[indexPath.row])
+        let cell = tableView.dequeueReusableCell(withIdentifier: RatingExchangersTableViewCell.identifier, for: indexPath) as! RatingExchangersTableViewCell
+        cell.selectionStyle = .none
+        
+        cell.setup(name: ContextDB.shared.allRatingExchangers()[indexPath.row].name!, status: ContextDB.shared.allRatingExchangers()[indexPath.row].status!, reserve: ContextDB.shared.allRatingExchangers()[indexPath.row].reserve!, reviews: ContextDB.shared.allRatingExchangers()[indexPath.row].reviews!, checkButton: true)
+        
+        cell.saveButtonClick = {
+            ContextDB.shared.deleteExchanger(name: ContextDB.shared.allRatingExchangers()[indexPath.row].name!)
+            tableView.reloadData()
+        }
         
         return cell
     }
@@ -98,13 +105,9 @@ extension FavoritesExchangersViewController: UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if let url = URL(string: ContextDB.shared.allHistory()[indexPath.row].url!) {
-            ContextDB.shared.createHistory(name: ContextDB.shared.allHistory()[indexPath.row].name!, give: ContextDB.shared.allHistory()[indexPath.row].give!, receive: ContextDB.shared.allHistory()[indexPath.row].receive!, reserve: ContextDB.shared.allHistory()[indexPath.row].reserve!, url: ContextDB.shared.allHistory()[indexPath.row].url!)
-            
+        if let url = URL(string: ContextDB.shared.allRatingExchangers()[indexPath.row].url!) {
             let safariViewController = SFSafariViewController(url: url)
             present(safariViewController, animated: true, completion: nil)
-            
-            tableView.reloadData()
         }
     }
 }

@@ -5,7 +5,17 @@
 
 import UIKit
 
-struct Resources {
+final class Resources {
+    
+    // MARK: Menu Title
+    
+    enum MenuTitle {
+        static var currencies = "Валюты"
+        static var news = "Новости"
+        static var home = "Обменники"
+        static var favorites = "Избранное"
+        static var profile = "Профиль"
+    }
     
     // MARK: Picker Model Exchangers
 
@@ -42,14 +52,15 @@ struct Resources {
     static let pickerModelConverterReceive = pickerModelConverterGive
     
     static let pickerModelConverter = [pickerModelConverterGive, pickerModelConverterReceive]
-
-    // MARK: Menu Title
     
-    enum MenuTitle {
-        static var currencies = "Валюты"
-        static var news = "Новости"
-        static var home = "Обменники"
-        static var favorites = "Избранное"
-        static var profile = "Профиль"
+    // MARK: Get Today Day
+    
+    static func getDate() -> String {
+        var time = NSDate()
+        var formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.YYYY"
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        
+        return formatter.string(from: time as Date)
     }
 }

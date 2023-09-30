@@ -6,7 +6,7 @@
 import UIKit
 import SafariServices
 
-class AllExchangersViewController: BaseController {
+class RatingExchangersViewController: BaseController {
     
     let service = ParseRatingExchangers.shared
     
@@ -16,7 +16,7 @@ class AllExchangersViewController: BaseController {
     
     private let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(AllExchangersTableViewCell.self, forCellReuseIdentifier: AllExchangersTableViewCell.identifier)
+        tableView.register(RatingExchangersTableViewCell.self, forCellReuseIdentifier: RatingExchangersTableViewCell.identifier)
         tableView.rowHeight = 70
         
         return tableView
@@ -81,15 +81,28 @@ class AllExchangersViewController: BaseController {
 
 // MARK: Extension
 
-extension AllExchangersViewController: UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
+extension RatingExchangersViewController: UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return service.allExchangers.count
+        return service.ratingExchangers.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: AllExchangersTableViewCell.identifier, for: indexPath) as! AllExchangersTableViewCell
-        cell.setup(exchanger: service.allExchangers[indexPath.row])
+        let cell = tableView.dequeueReusableCell(withIdentifier: RatingExchangersTableViewCell.identifier, for: indexPath) as! RatingExchangersTableViewCell
+        cell.selectionStyle = .none
+        
+        let checkExchanger = ContextDB.shared.checkExchanger(name: service.ratingExchangers[indexPath.row].name)
+        
+        cell.setup(name: service.ratingExchangers[indexPath.row].name, status: service.ratingExchangers[indexPath.row].status, reserve: service.ratingExchangers[indexPath.row].reserve, reviews: service.ratingExchangers[indexPath.row].reviews, checkButton: checkExchanger)
+        cell.saveButtonClick = { [self] in
+            if checkExchanger {
+                ContextDB.shared.deleteExchanger(name: service.ratingExchangers[indexPath.row].name)
+            } else {
+                ContextDB.shared.createExchanger(exchanger: service.ratingExchangers[indexPath.row])
+            }
+            
+            tableView.reloadData()
+        }
         
         return cell
     }
@@ -102,7 +115,7 @@ extension AllExchangersViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if let url = URL(string: service.allExchangers[indexPath.row].url) {
+        if let url = URL(string: service.ratingExchangers[indexPath.row].url) {
             let safariViewController = SFSafariViewController(url: url)
             present(safariViewController, animated: true, completion: nil)
         }

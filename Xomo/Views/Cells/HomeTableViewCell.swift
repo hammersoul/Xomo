@@ -123,7 +123,14 @@ class HomeTableViewCell: UITableViewCell {
     
     // MARK: Setup Cell
     
-    func setup(exchanger: ExchangerModel) {
+    func setupHome(exchanger: ExchangerModel) {
+        nameLabel.text = exchanger.name
+        giveLabel.text = exchanger.give
+        receiveLabel.text = exchanger.receive
+        reserveLabel.text = exchanger.reserve
+    }
+    
+    func setupHistory(exchanger: History) {
         nameLabel.text = exchanger.name
         giveLabel.text = exchanger.give
         receiveLabel.text = exchanger.receive

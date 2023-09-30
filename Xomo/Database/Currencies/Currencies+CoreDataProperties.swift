@@ -2,13 +2,9 @@
 //  Currencies+CoreDataProperties.swift
 //  Xomo
 //
-//  Created by Тимофей Кубышин on 2023-09-29.
-//
-//
 
 import Foundation
 import CoreData
-
 
 extension Currencies {
 
@@ -21,7 +17,6 @@ extension Currencies {
     @NSManaged public var price: String?
     @NSManaged public var ticker: String?
     @NSManaged public var name: String?
-
 }
 
 extension Currencies : Identifiable {

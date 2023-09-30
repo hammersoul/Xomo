@@ -8,6 +8,7 @@ import UIKit
 class RatingExchangersTableViewCell: UITableViewCell {
     
     static let identifier = "AllExchangersTableViewCell"
+    var saveButtonClick: (() -> Void)? = nil
     
     // MARK: UI
     
@@ -54,10 +55,15 @@ class RatingExchangersTableViewCell: UITableViewCell {
     private let saveButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(systemName: "bookmark", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30)), for: .normal)
+        
+        button.addTarget(self, action: #selector(didTapButton(sender:)), for: .touchUpInside)
         
         return button
     }()
+    
+    @objc func didTapButton(sender: UIButton) {
+        saveButtonClick?()
+      }
     
     private let hStackView: UIStackView = {
         let stackView = UIStackView()
@@ -145,16 +151,22 @@ class RatingExchangersTableViewCell: UITableViewCell {
     
     // MARK: Setup Cell
     
-    func setup(exchanger: RatingExchangersModel) {
-        nameLabel.text = exchanger.name
-        statusLabel.text = exchanger.status
-        reserveLabel.text = exchanger.reserve
-        reviewsLabel.text = exchanger.reviews
+    func setup(name: String, status: String, reserve: String, reviews: String, checkButton: Bool) {
+        nameLabel.text = name
+        statusLabel.text = status
+        reserveLabel.text = reserve
+        reviewsLabel.text = reviews
         
-        if exchanger.status == "Не работает" {
+        if status == "Не работает" {
             statusLabel.textColor = #colorLiteral(red: 0.7882352941, green: 0.3215686275, blue: 0.3647058824, alpha: 1)
         } else {
             statusLabel.textColor = #colorLiteral(red: 0.2862745098, green: 0.6392156863, blue: 0.6705882353, alpha: 1)
+        }
+        
+        if checkButton {
+            saveButton.setImage(UIImage(systemName: "bookmark.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30)), for: .normal)
+        } else {
+            saveButton.setImage(UIImage(systemName: "bookmark", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30)), for: .normal)
         }
     }
     

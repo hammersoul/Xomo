@@ -8,6 +8,7 @@ import UIKit
 class CurrancyTableViewCell: UITableViewCell {
     
     static let identifier = "CurranciesTableViewCell"
+    var saveButtonClick: (() -> Void)? = nil
     
     // MARK: UI
     
@@ -39,25 +40,30 @@ class CurrancyTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 18.0)
         label.translatesAutoresizingMaskIntoConstraints = false
-        
+                
         return label
     }()
     
-    private let priceChangeLabel: UILabel = {
+    private let changeLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 16.0)
         label.translatesAutoresizingMaskIntoConstraints = false
-        
+                
         return label
     }()
     
     private let saveButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(systemName: "bookmark", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30)), for: .normal)
+        
+        button.addTarget(self, action: #selector(didTapButton(sender:)), for: .touchUpInside)
         
         return button
     }()
+    
+    @objc func didTapButton(sender: UIButton) {
+        saveButtonClick?()
+      }
     
     private let hStackView: UIStackView = {
         let stackView = UIStackView()
@@ -111,7 +117,7 @@ class CurrancyTableViewCell: UITableViewCell {
         vStackViewOne.addArrangedSubview(tickerLabel)
         
         vStackViewTwo.addArrangedSubview(priceLabel)
-        vStackViewTwo.addArrangedSubview(priceChangeLabel)
+        vStackViewTwo.addArrangedSubview(changeLabel)
         vStackViewThree.addArrangedSubview(saveButton)
         
         contentView.addSubview(containerView)
@@ -144,17 +150,23 @@ class CurrancyTableViewCell: UITableViewCell {
     }
     
     // MARK: Setup Cell
-    
-    func setup(currency: CurrencyModel) {
-        nameLabel.text = currency.name
-        tickerLabel.text = currency.ticker
-        priceLabel.text = currency.priceOne
-        priceChangeLabel.text = currency.priceTwo
         
-        if currency.priceTwo.first == "-" {
-            priceChangeLabel.textColor = #colorLiteral(red: 0.7882352941, green: 0.3215686275, blue: 0.3647058824, alpha: 1)
+    func setup(name: String, ticker: String, price: String, change: String, checkButton: Bool) {
+        nameLabel.text = name
+        tickerLabel.text = ticker
+        priceLabel.text = price
+        changeLabel.text = change
+        
+        if change.first == "-" {
+            changeLabel.textColor = #colorLiteral(red: 0.7882352941, green: 0.3215686275, blue: 0.3647058824, alpha: 1)
         } else {
-            priceChangeLabel.textColor = #colorLiteral(red: 0.2862745098, green: 0.6392156863, blue: 0.6705882353, alpha: 1)
+            changeLabel.textColor = #colorLiteral(red: 0.2862745098, green: 0.6392156863, blue: 0.6705882353, alpha: 1)
+        }
+        
+        if checkButton {
+            saveButton.setImage(UIImage(systemName: "bookmark.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30)), for: .normal)
+        } else {
+            saveButton.setImage(UIImage(systemName: "bookmark", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30)), for: .normal)
         }
     }
     
