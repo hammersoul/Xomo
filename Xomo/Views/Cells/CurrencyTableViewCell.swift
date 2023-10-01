@@ -5,9 +5,9 @@
 
 import UIKit
 
-class CurrancyTableViewCell: UITableViewCell {
+class CurrencyTableViewCell: UITableViewCell {
     
-    static let identifier = "CurranciesTableViewCell"
+    static let identifier = "CurrenciesTableViewCell"
     var saveButtonClick: (() -> Void)? = nil
     
     // MARK: UI
@@ -21,38 +21,38 @@ class CurrancyTableViewCell: UITableViewCell {
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 18.0)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: 14)
         
         return label
     }()
     
     private let tickerLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 16.0)
-        label.textColor = UIColor.tabBarItemLight
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: 12)
+        label.textColor = Resources.tabBarItemLight
         
         return label
     }()
     
     private let priceLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 18.0)
         label.translatesAutoresizingMaskIntoConstraints = false
-                
+        label.font = UIFont.boldSystemFont(ofSize: 14)
+        
         return label
     }()
     
     private let changeLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 16.0)
         label.translatesAutoresizingMaskIntoConstraints = false
-                
+        label.font = UIFont.boldSystemFont(ofSize: 12)
+        
         return label
     }()
     
-    private let saveButton: UIButton = {
+    private lazy var saveButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         
@@ -60,10 +60,6 @@ class CurrancyTableViewCell: UITableViewCell {
         
         return button
     }()
-    
-    @objc func didTapButton(sender: UIButton) {
-        saveButtonClick?()
-      }
     
     private let hStackView: UIStackView = {
         let stackView = UIStackView()
@@ -107,12 +103,6 @@ class CurrancyTableViewCell: UITableViewCell {
     // MARK: Subview
     
     private func addSubview() {
-        containerView.addSubview(hStackView)
-        
-        hStackView.addArrangedSubview(vStackViewOne)
-        hStackView.addArrangedSubview(vStackViewTwo)
-        hStackView.addArrangedSubview(vStackViewThree)
-        
         vStackViewOne.addArrangedSubview(nameLabel)
         vStackViewOne.addArrangedSubview(tickerLabel)
         
@@ -120,6 +110,11 @@ class CurrancyTableViewCell: UITableViewCell {
         vStackViewTwo.addArrangedSubview(changeLabel)
         vStackViewThree.addArrangedSubview(saveButton)
         
+        hStackView.addArrangedSubview(vStackViewOne)
+        hStackView.addArrangedSubview(vStackViewTwo)
+        hStackView.addArrangedSubview(vStackViewThree)
+        
+        containerView.addSubview(hStackView)
         contentView.addSubview(containerView)
     }
     
@@ -127,20 +122,22 @@ class CurrancyTableViewCell: UITableViewCell {
     
     private func setupLayout() {
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            containerView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor),
+            containerView.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor),
             
-            hStackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 0),
-            hStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            hStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 0),
-            hStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 0),
+            hStackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 4),
+            hStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            hStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -4),
+            hStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
             
             vStackViewOne.topAnchor.constraint(equalTo: hStackView.topAnchor, constant: 0),
             vStackViewOne.bottomAnchor.constraint(equalTo: hStackView.bottomAnchor, constant: 0),
+            
             vStackViewTwo.topAnchor.constraint(equalTo: hStackView.topAnchor, constant: 0),
             vStackViewTwo.bottomAnchor.constraint(equalTo: hStackView.bottomAnchor, constant: 0),
+            
             vStackViewThree.topAnchor.constraint(equalTo: hStackView.topAnchor, constant: 0),
             vStackViewThree.bottomAnchor.constraint(equalTo: hStackView.bottomAnchor, constant: 0),
             
@@ -150,13 +147,18 @@ class CurrancyTableViewCell: UITableViewCell {
     }
     
     // MARK: Setup Cell
-        
+    
     func setup(name: String, ticker: String, price: String, change: String, checkButton: Bool) {
         nameLabel.text = name
         tickerLabel.text = ticker
         priceLabel.text = price
         changeLabel.text = change
         
+        checkUI(change: change, checkButton: checkButton)
+    }
+    
+    // Check UI
+    private func checkUI(change: String, checkButton: Bool) {
         if change.first == "-" {
             changeLabel.textColor = #colorLiteral(red: 0.7882352941, green: 0.3215686275, blue: 0.3647058824, alpha: 1)
         } else {
@@ -182,5 +184,9 @@ class CurrancyTableViewCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc func didTapButton(sender: UIButton) {
+        saveButtonClick?()
     }
 }
