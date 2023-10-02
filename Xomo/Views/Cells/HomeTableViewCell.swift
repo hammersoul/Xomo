@@ -20,33 +20,33 @@ class HomeTableViewCell: UITableViewCell {
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 18.0)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: 14)
         
         return label
     }()
     
     private let reserveLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16.0)
-        label.textColor = UIColor.tabBarItemLight
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.textColor = Resources.tabBarItemLight
         
         return label
     }()
     
     private let giveLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 14.0)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: 12)
         
         return label
     }()
     
     private let receiveLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 14.0)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: 12)
         
         return label
     }()
@@ -75,7 +75,7 @@ class HomeTableViewCell: UITableViewCell {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
-        stackView.alignment = .center
+        stackView.alignment = .leading
         stackView.distribution = .fillEqually
         
         return stackView
@@ -102,39 +102,33 @@ class HomeTableViewCell: UITableViewCell {
     
     private func setupLayout() {
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            containerView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor),
+            containerView.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor),
             
-            hStackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 0),
-            hStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            hStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 0),
-            hStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -8),
+            hStackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 4),
+            hStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            hStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -4),
+            hStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
             
             vStackViewOne.topAnchor.constraint(equalTo: hStackView.topAnchor, constant: 0),
             vStackViewOne.bottomAnchor.constraint(equalTo: hStackView.bottomAnchor, constant: 0),
+            
             vStackViewTwo.topAnchor.constraint(equalTo: hStackView.topAnchor, constant: 0),
             vStackViewTwo.bottomAnchor.constraint(equalTo: hStackView.bottomAnchor, constant: 0),
             
-            vStackViewOne.widthAnchor.constraint(equalToConstant: containerView.frame.width / 2.0),
+            vStackViewOne.widthAnchor.constraint(equalToConstant: containerView.frame.width / 1.8),
         ])
     }
     
     // MARK: Setup Cell
     
-    func setupHome(exchanger: ExchangerModel) {
-        nameLabel.text = exchanger.name
-        giveLabel.text = exchanger.give
-        receiveLabel.text = exchanger.receive
-        reserveLabel.text = exchanger.reserve
-    }
-    
-    func setupHistory(exchanger: History) {
-        nameLabel.text = exchanger.name
-        giveLabel.text = exchanger.give
-        receiveLabel.text = exchanger.receive
-        reserveLabel.text = exchanger.reserve
+    func setup(name: String, give: String, receive: String, reserve: String) {
+        nameLabel.text = name
+        giveLabel.text = "Отдадите: " + give
+        receiveLabel.text = "Получите: " + receive
+        reserveLabel.text = reserve        
     }
     
     // MARK: Init

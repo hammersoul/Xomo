@@ -20,18 +20,18 @@ class NewsTableViewCell: UITableViewCell {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 18.0)
-        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.numberOfLines = 0
         
         return label
     }()
     
     private let dateLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16.0)
-        label.textColor = UIColor.tabBarItemLight
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.textColor = Resources.tabBarItemLight
         
         return label
     }()
@@ -58,27 +58,25 @@ class NewsTableViewCell: UITableViewCell {
     
     // MARK: Layout Constraint
     
-    private func setupLayout() {
+    private func setupLayout() {        
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            containerView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor),
+            containerView.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor),
             
-            vStackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 8),
-            vStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            vStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8),
-            vStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 0),
-            
-            titleLabel.trailingAnchor.constraint(equalTo: vStackView.trailingAnchor, constant: -20)
+            vStackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 4),
+            vStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            vStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -4),
+            vStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16)
         ])
     }
     
     // MARK: Setup Cell
     
-    func setup(news: NewsModel) {
-        titleLabel.text = news.title
-        dateLabel.text = news.data
+    func setup(title: String, date: String) {
+        titleLabel.text = title
+        dateLabel.text = date
     }
     
     // MARK: Init

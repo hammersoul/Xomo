@@ -10,10 +10,10 @@ final class ParseCurrencies {
     
     static let shared = ParseCurrencies()
     
-    var url = "https://crypto.com/price?page="
+    var url = "https://crypto.com/price"
     public var currencies = [CurrencyModel]()
     
-    // MARK: Currencies Parsing
+    // MARK: Parsing Currencies
     
     func parse(completion: @escaping (([CurrencyModel]) -> Void)) {
         DispatchQueue.global().asyncAfter(deadline: .now()) { [weak self] in
@@ -28,20 +28,25 @@ final class ParseCurrencies {
                     let elementsChange: Elements = try document.getElementsByClass("css-vtw5vj").select("p")
                     let elementsURL: Elements = try document.getElementsByClass("chakra-link css-tzmkfm")
                     
-                    for index in 0..<elementsName.count {
-                        let currency = try CurrencyModel(name: elementsName[index].text(), ticker: elementsTicker[index].text(), price: elementsPrice[index].text(), change: elementsChange[index].text(), url: elementsURL[index].attr("href"))
-                                                
-                        self?.currencies.append(currency)
+                    if (elementsName.count == elementsTicker.count && elementsName.count == elementsPrice.count && elementsName.count == elementsChange.count && elementsName.count == elementsURL.count) {
+                        for index in 0..<elementsName.count {
+                            let currency = try CurrencyModel(name: elementsName[index].text(), ticker: elementsTicker[index].text(), price: elementsPrice[index].text(), change: elementsChange[index].text(), url: elementsURL[index].attr("href"))
+                            
+                            self?.currencies.append(currency)
+                        }
+                    } else {
+                        completion([])
                     }
                     
                     completion(self?.currencies ?? [])
                 } catch {
-                    print("Error get currencies")
+                    completion([])
                 }
             }
         }
     }
     
+    // Parse Price and Change
     func priceChange(ticker: String) -> (String, String) {
         var price = String()
         var change = String()

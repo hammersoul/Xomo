@@ -10,11 +10,10 @@ import UIScrollView_InfiniteScroll
 class NewsViewController: BaseController {
     
     let service = ParseNews.shared
-    var pageCount = 1
     
     // MARK: UI
     
-    var spinner = UIActivityIndicatorView(style: .large)
+    var spinner = UIActivityIndicatorView(style: .medium)
     
     private let tableView: UITableView = {
         let tableView = UITableView()
@@ -23,7 +22,21 @@ class NewsViewController: BaseController {
         return tableView
     }()
     
-    private let refreshControl: UIRefreshControl = {
+    private let errorLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.textColor = Resources.tabBarItemLight
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.isHidden = true
+        
+        label.text = "Ошибка загрузки новостей. Проверьте подключение к интернету."
+        
+        return label
+    }()
+    
+    private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh(sender:)), for: .valueChanged)
         
@@ -35,10 +48,11 @@ class NewsViewController: BaseController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Новости"
-        navigationController?.tabBarItem.title = Resources.MenuTitle.news
+        title = Resources.MenuTitle.news
         
         addSubview()
+        setupLayout()
+        
         setupTableView()
     }
     
@@ -46,6 +60,8 @@ class NewsViewController: BaseController {
     
     private func addSubview() {
         view.addSubview(tableView)
+        view.addSubview(errorLabel)
+        
         tableView.addSubview(refreshControl)
     }
     
@@ -57,41 +73,70 @@ class NewsViewController: BaseController {
         tableView.frame = view.bounds
     }
     
+    private func setupLayout() {
+        NSLayoutConstraint.activate([
+            errorLabel.widthAnchor.constraint(equalToConstant: 250),
+            errorLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
+    }
+    
+    // MARK: Error Label
+    
+    private func errorShow() {
+        if service.news.count == 0 {
+            errorLabel.isHidden = false
+        } else {
+            errorLabel.isHidden = true
+            scrollTableView()
+        }
+    }
+    
     // MARK: Setup TableView
     
+    // First boot
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         
         spinner.startAnimating()
         tableView.backgroundView = spinner
+        tableView.infiniteScrollDirection = .vertical
         
-        service.parse { _ in
+        service.parse(completion: { _ in
             DispatchQueue.main.async {
                 self.tableView.reloadData()
                 self.spinner.stopAnimating()
+                
+                self.errorShow()
             }
-        }
-        
-        tableView.infiniteScrollDirection = .vertical
+        }, page: self.service.page)
+    }
+    
+    // Navigate pages
+    private func scrollTableView() {
         tableView.addInfiniteScroll { table in
-            if self.pageCount <= 50 {
-                self.pageCount += 1
+            if self.service.page <= 50 {
+                self.service.page += 1
                 
                 self.service.parse(completion: { _ in
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                         table.finishInfiniteScroll()
                     }
-                }, page: String(self.pageCount))
+                }, page: self.service.page)
             } else {
                 table.finishInfiniteScroll()
             }
         }
     }
     
+    // MARK: Function
+    
     @objc private func refresh(sender: UIRefreshControl) {
-        tableView.reloadData()
+        errorLabel.isHidden = true
+        setupTableView()
+        
         sender.endRefreshing()
     }
 }
@@ -105,15 +150,12 @@ extension NewsViewController: UITableViewDelegate, UITableViewDataSource, UIScro
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let index = service.news[indexPath.row]
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier, for: indexPath) as! NewsTableViewCell
-        cell.setup(news: service.news[indexPath.row])
+        cell.setup(title: index.title, date: index.date)
         
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection
-                   section: Int) -> String? {
-        return "Источник: bits.media"
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -123,5 +165,10 @@ extension NewsViewController: UITableViewDelegate, UITableViewDataSource, UIScro
             let safariViewController = SFSafariViewController(url: url)
             present(safariViewController, animated: true, completion: nil)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection
+                   section: Int) -> String? {
+        return service.news.count != 0 ? "Новости криптовалют, биткоина, блокчейна" : ""
     }
 }

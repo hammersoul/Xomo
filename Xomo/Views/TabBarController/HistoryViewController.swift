@@ -89,7 +89,7 @@ extension HistoryViewController: UITableViewDelegate, UITableViewDataSource, UIS
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.identifier, for: indexPath) as! HomeTableViewCell
-        cell.setupHistory(exchanger: ContextDB.shared.allHistory()[indexPath.row])
+        //cell.setupHistory(exchanger: ContextDB.shared.allHistory()[indexPath.row])
         
         return cell
     }

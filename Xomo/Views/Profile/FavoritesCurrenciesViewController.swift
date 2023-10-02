@@ -14,7 +14,7 @@ class FavoritesCurrenciesViewController: BaseController {
     
     private let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(CurrancyTableViewCell.self, forCellReuseIdentifier: CurrancyTableViewCell.identifier)
+        tableView.register(CurrencyTableViewCell.self, forCellReuseIdentifier: CurrencyTableViewCell.identifier)
         tableView.rowHeight = 70
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -98,7 +98,7 @@ extension FavoritesCurrenciesViewController: UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: CurrancyTableViewCell.identifier, for: indexPath) as! CurrancyTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: CurrencyTableViewCell.identifier, for: indexPath) as! CurrencyTableViewCell
         cell.selectionStyle = .none
                         
         cell.setup(name: ContextDB.shared.allCurrencies()[indexPath.row].name!, ticker: ContextDB.shared.allCurrencies()[indexPath.row].ticker!, price: ParseCurrencies.shared.priceChange(ticker: ContextDB.shared.allCurrencies()[indexPath.row].ticker!).0, change: ParseCurrencies.shared.priceChange(ticker: ContextDB.shared.allCurrencies()[indexPath.row].ticker!).1, checkButton: true)

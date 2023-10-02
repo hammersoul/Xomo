@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  HomeViewController.swift
 //  Xomo
 //
 
@@ -12,22 +12,29 @@ class HomeViewController: BaseController {
     
     // MARK: UI
     
-    private let spinner = UIActivityIndicatorView(style: .large)
+    private let spinner = UIActivityIndicatorView(style: .medium)
     
     private let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.identifier)
-        tableView.rowHeight = 70
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.identifier)
+        tableView.rowHeight = 55
         
         return tableView
     }()
     
-    private let refreshControl: UIRefreshControl = {
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refresh(sender:)), for: .valueChanged)
+    private let errorLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.textColor = Resources.tabBarItemLight
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.isHidden = true
         
-        return refreshControl
+        label.text = "Ошибка загрузки обменников. Проверьте подключение к интернету или измените запрос."
+        
+        return label
     }()
     
     let textFieldGive: UITextField = {
@@ -36,10 +43,10 @@ class HomeViewController: BaseController {
         textField.textAlignment = .center
         textField.tintColor = .clear
         textField.backgroundColor = .secondarySystemBackground
-        textField.font = UIFont.boldSystemFont(ofSize: 14)
-        textField.layer.cornerRadius = 10
+        textField.font = UIFont.boldSystemFont(ofSize: 12)
+        textField.layer.cornerRadius = 8
         
-        textField.text = "Сбербанк RUB"
+        textField.text = Resources.pickerModel[0][0]
         
         return textField
     }()
@@ -50,10 +57,10 @@ class HomeViewController: BaseController {
         textField.textAlignment = .center
         textField.tintColor = .clear
         textField.backgroundColor = .secondarySystemBackground
-        textField.font = UIFont.boldSystemFont(ofSize: 14)
-        textField.layer.cornerRadius = 10
+        textField.font = UIFont.boldSystemFont(ofSize: 12)
+        textField.layer.cornerRadius = 8
         
-        textField.text = "Сбербанк RUB"
+        textField.text = Resources.pickerModel[1][1]
         
         return textField
     }()
@@ -74,11 +81,13 @@ class HomeViewController: BaseController {
         return toolbar
     }()
     
-    let doneButton = UIBarButtonItem(title: "Готово", style: .done, target: self, action: #selector(doneClick))
-    
-    let imageViewArrow: UIImageView = {
+    lazy var imageViewReverse: UIImageView = {
         let imageView = UIImageView()
+        imageView.isUserInteractionEnabled = true
         imageView.image = UIImage(systemName: "arrow.left.arrow.right", withConfiguration: UIImage.SymbolConfiguration(pointSize: 15, weight: .medium, scale: .large))
+        imageView.isUserInteractionEnabled = true
+        
+        imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageViewReverseTapped)))
         
         return imageView
     }()
@@ -98,48 +107,51 @@ class HomeViewController: BaseController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Обменники"
-        navigationController?.tabBarItem.title = Resources.MenuTitle.home
+        title = Resources.MenuTitle.home
         
         addSubview()
         setupLayout()
+        
         setupPickerView()
-        setupTableView()
+        setupTableView()        
     }
     
     //MARK: Subview
     
     private func addSubview() {
         hStackView.addArrangedSubview(textFieldGive)
-        hStackView.addArrangedSubview(imageViewArrow)
+        hStackView.addArrangedSubview(imageViewReverse)
         hStackView.addArrangedSubview(textFieldReceive)
-        
-        tableView.addSubview(refreshControl)
-
+                
         view.addSubview(hStackView)
         view.addSubview(tableView)
+        view.addSubview(errorLabel)
     }
     
     // MARK: Layout Constraint
     
     private func setupLayout() {
         NSLayoutConstraint.activate([
-            hStackView.widthAnchor.constraint(equalToConstant: view.frame.width - 40),
+            hStackView.widthAnchor.constraint(equalToConstant: view.frame.width - 32),
             hStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             hStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             
-            textFieldGive.widthAnchor.constraint(equalToConstant: (view.frame.width - 40) / 2.2),
+            textFieldGive.widthAnchor.constraint(equalToConstant: (view.frame.width - 32) / 2.2),
             textFieldGive.heightAnchor.constraint(equalToConstant: 30),
+            
+            imageViewReverse.heightAnchor.constraint(equalToConstant: 20),
+            imageViewReverse.widthAnchor.constraint(equalToConstant: 25),
             
             textFieldReceive.heightAnchor.constraint(equalToConstant: 30),
             
-            imageViewArrow.heightAnchor.constraint(equalToConstant: 30),
-            imageViewArrow.widthAnchor.constraint(equalToConstant: 30),
-            
             tableView.topAnchor.constraint(equalTo: hStackView.topAnchor, constant: 40),
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 20),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0)
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
+            
+            errorLabel.widthAnchor.constraint(equalToConstant: 250),
+            errorLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
     
@@ -170,38 +182,60 @@ class HomeViewController: BaseController {
         
         spinner.startAnimating()
         tableView.backgroundView = spinner
-        
-        service.parse(completion: { _ in
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-                self.spinner.stopAnimating()
-            }
-        }, exchangers: "SBERRUB-BTC/")
+            
+        doneClick()
     }
     
+    // MARK: Error Label
+    
+    private func errorShow() {
+        if service.exchangers.count == 0 {
+            errorLabel.isHidden = false
+        } else {
+            errorLabel.isHidden = true
+        }
+    }
+    
+    // MARK: Function
+    
+    lazy var doneButton = UIBarButtonItem(title: "Готово", style: .done, target: self, action: #selector(doneClick))
+    
     @objc func doneClick() {
+        view.endEditing(true)
+        
         if let keyGive = Resources.pickerModelDictionary.first(where: { $0.value == textFieldGive.text! })?.key {
             if let keyReceive = Resources.pickerModelDictionary.first(where: { $0.value == textFieldReceive.text! })?.key {
                 service.exchangers.removeAll()
-                
-                spinner.startAnimating()
-                tableView.backgroundView = spinner
                 
                 service.parse(completion: { _ in
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                         self.spinner.stopAnimating()
+                        
+                        self.errorShow()
                     }
-                }, exchangers: keyGive + "-" + keyReceive + "/")
+                }, exchanger: keyGive + "-" + keyReceive + "/")
             }
         }
         
-        view.endEditing(true)
-     }
+        // Get currecny
+        let giveCurrency = textFieldGive.text?.components(separatedBy: " ").last
+        if let giveCurrencyText = giveCurrency {
+            service.giveCurrency = giveCurrencyText
+        }
+       
+        let receiveCurrency = textFieldReceive.text?.components(separatedBy: " ").last
+        if let receiveCurrencyText = receiveCurrency {
+            service.receiveCurrency = receiveCurrencyText
+        }
+    }
     
-    @objc private func refresh(sender: UIRefreshControl) {
-        tableView.reloadData()
-        sender.endRefreshing()
+    @objc private func imageViewReverseTapped() {
+        let text = textFieldReceive.text
+        textFieldReceive.text = textFieldGive.text
+        textFieldGive.text = text
+        
+        doneClick()
     }
 }
 
@@ -232,7 +266,7 @@ extension HomeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-
+        
         var label: UILabel
         if let view = view as? UILabel { label = view }
         else { label = UILabel() }
@@ -244,12 +278,12 @@ extension HomeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
             textFieldReceive.text = Resources.pickerModel[1][row]
             label.text = Resources.pickerModel[1][row]
         }
-
+        
         label.textAlignment = .center
         label.font = UIFont.boldSystemFont(ofSize: 16)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
-
+        
         return label
     }
 }
@@ -268,31 +302,28 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource, UIScro
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let index = service.exchangers[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.identifier, for: indexPath) as! HomeTableViewCell
-        cell.setupHome(exchanger: service.exchangers[indexPath.row])
+        cell.setup(name: index.name, give: Resources.formatterPrice(price: index.give) + " " + service.giveCurrency, receive: Resources.formatterPrice(price: index.receive) + " " + service.receiveCurrency, reserve: index.reserve)
         
         return cell
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection
-                   section: Int) -> String? {
-        
-        return "Источник: wellcrypto.io"
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let index = service.exchangers[indexPath.row]
         
-        if let url = URL(string: service.exchangers[indexPath.row].url) {
-            ContextDB.shared.createHistory(name:service.exchangers[indexPath.row].name, give: service.exchangers[indexPath.row].give, receive: service.exchangers[indexPath.row].receive, reserve: service.exchangers[indexPath.row].reserve, url: service.exchangers[indexPath.row].url)
+        if let url = URL(string: index.url) {
+            ContextDB.shared.createHistory(name: index.name, give: index.give, receive: index.receive, reserve: index.reserve, url: index.url)
             
             let safariViewController = SFSafariViewController(url: url)
             present(safariViewController, animated: true, completion: nil)
         }
     }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection
+                   section: Int) -> String? {
+        
+        return service.exchangers.count != 0 ? "Обменники по выбранному запросу" : ""
+    }
 }
-
-//        let label = UILabel()
-//        label.textColor = UIColor.white
-//        label.text = "TCO_choose_reminder".localized;
-//        self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: label)

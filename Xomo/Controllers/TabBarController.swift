@@ -20,8 +20,8 @@ final class TabBarController: UITabBarController {
         
         newsNavigation.tabBarItem = UITabBarItem(title: Resources.MenuTitle.news, image: UIImage(systemName: "doc.plaintext.fill", withConfiguration: largeConfig), tag: 0)
         currenciesNavigation.tabBarItem = UITabBarItem(title: Resources.MenuTitle.currencies, image: UIImage(systemName: "bitcoinsign.circle.fill", withConfiguration: largeConfig), tag: 0)
-        homeNavigation.tabBarItem = UITabBarItem(title: Resources.MenuTitle.home, image: UIImage(systemName: "location.fill", withConfiguration: largeConfig), tag: 0)
-        historyNavigation.tabBarItem = UITabBarItem(title: Resources.MenuTitle.favorites, image: UIImage(systemName: "clock.fill", withConfiguration: largeConfig), tag: 0)
+        homeNavigation.tabBarItem = UITabBarItem(title: Resources.MenuTitle.home, image: UIImage(systemName: "arrow.left.arrow.right", withConfiguration: largeConfig), tag: 0)
+        historyNavigation.tabBarItem = UITabBarItem(title: Resources.MenuTitle.history, image: UIImage(systemName: "clock.fill", withConfiguration: largeConfig), tag: 0)
         profileNavigation.tabBarItem = UITabBarItem(title: Resources.MenuTitle.profile, image: UIImage(systemName: "person.fill", withConfiguration: largeConfig), tag: 0)
         
         setViewControllers([newsNavigation, currenciesNavigation, homeNavigation, historyNavigation, profileNavigation], animated: false)
@@ -33,7 +33,7 @@ final class TabBarController: UITabBarController {
     
     private func appearanceTabBarController() {
         tabBar.backgroundColor = .secondarySystemBackground
-        tabBar.unselectedItemTintColor = .tabBarItemLight
+        tabBar.unselectedItemTintColor = Resources.tabBarItemLight
         
         tabBar.layer.cornerRadius = 10
         tabBar.itemPositioning = .automatic
