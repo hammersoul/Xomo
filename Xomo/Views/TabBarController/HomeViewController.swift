@@ -122,7 +122,7 @@ class HomeViewController: BaseController {
         hStackView.addArrangedSubview(textFieldGive)
         hStackView.addArrangedSubview(imageViewReverse)
         hStackView.addArrangedSubview(textFieldReceive)
-                
+        
         view.addSubview(hStackView)
         view.addSubview(tableView)
         view.addSubview(errorLabel)
@@ -182,7 +182,7 @@ class HomeViewController: BaseController {
         
         spinner.startAnimating()
         tableView.backgroundView = spinner
-            
+        
         doneClick()
     }
     
@@ -223,7 +223,7 @@ class HomeViewController: BaseController {
         if let giveCurrencyText = giveCurrency {
             service.giveCurrency = giveCurrencyText
         }
-       
+        
         let receiveCurrency = textFieldReceive.text?.components(separatedBy: " ").last
         if let receiveCurrencyText = receiveCurrency {
             service.receiveCurrency = receiveCurrencyText
@@ -304,6 +304,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource, UIScro
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let index = service.exchangers[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.identifier, for: indexPath) as! HomeTableViewCell
+        
         cell.setup(name: index.name, give: Resources.formatterPrice(price: index.give) + " " + service.giveCurrency, receive: Resources.formatterPrice(price: index.receive) + " " + service.receiveCurrency, reserve: index.reserve)
         
         return cell
@@ -314,7 +315,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource, UIScro
         let index = service.exchangers[indexPath.row]
         
         if let url = URL(string: index.url) {
-            ContextDB.shared.createHistory(name: index.name, give: index.give, receive: index.receive, reserve: index.reserve, url: index.url)
+            ContextDB.shared.createHistory(name: index.name, give: Resources.formatterPrice(price: index.give) + " " + service.giveCurrency, receive: Resources.formatterPrice(price: index.receive) + " " + service.receiveCurrency, reserve: index.reserve, url: index.url)
             
             let safariViewController = SFSafariViewController(url: url)
             present(safariViewController, animated: true, completion: nil)

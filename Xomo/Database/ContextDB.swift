@@ -53,7 +53,7 @@ final class ContextDB {
         } catch {
             
         }
-        return history
+        return history.reversed()
     }
     
     // MARK: Create Object
