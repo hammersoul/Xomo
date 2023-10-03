@@ -25,19 +25,19 @@ class ProfileViewController: BaseController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Профиль"
-        navigationController?.tabBarItem.title = Resources.MenuTitle.profile
-        view.addSubview(tableView)
+        title = Resources.MenuTitle.profile
+        navigationItem.largeTitleDisplayMode = .always
         
-        tableView.delegate = self
-        tableView.dataSource = self
+        addSubview()
         
+        setupTableView()
         configureModels()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.navigationBar.prefersLargeTitles = true
+    //MARK: Subview
+    
+    private func addSubview() {
+        view.addSubview(tableView)
     }
     
     // MARK: Layout Constraint
@@ -46,6 +46,13 @@ class ProfileViewController: BaseController {
         super.viewDidLayoutSubviews()
         
         tableView.frame = view.bounds
+    }
+    
+    // MARK: Setup TableView
+    
+    private func setupTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
     }
     
     // MARK: Configure Models
@@ -62,22 +69,22 @@ class ProfileViewController: BaseController {
         ])
         
         data.append([
-            ProfileCellModel(title: "Все обменники", image: "square.grid.3x3.middle.filled") { [weak self] in
-                self?.didTapAllExchangers()
+            ProfileCellModel(title: "Конвертер валют", image: "globe") { [weak self] in
+                self?.didTapConverter()
             },
             
-            ProfileCellModel(title: "Конвертер валют", image: "keyboard.fill") { [weak self] in
-                self?.didTapConverter()
+            ProfileCellModel(title: "Рейтинг обменников", image: "square.grid.3x3.middle.filled") { [weak self] in
+                self?.didTapAllExchangers()
             }
         ])
         
         data.append([
-            ProfileCellModel(title: "О приложении", image: "info.circle.fill") { [weak self] in
-                self?.didTapAbout()
-            },
-            
             ProfileCellModel(title: "Дополнительная информация", image: "questionmark.circle.fill") { [weak self] in
                 self?.didTapAdditionalInformation()
+            },
+            
+            ProfileCellModel(title: "О приложении", image: "info.circle.fill") { [weak self] in
+                self?.didTapAbout()
             }
         ])
     }
@@ -96,33 +103,27 @@ class ProfileViewController: BaseController {
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Профиль", style: .plain, target: nil, action: nil)
     }
     
-    private func didTapClear() {
-        let alert = UIAlertController(title: "Вы точно хотите очистить избранные обменники и валюты?", message: nil, preferredStyle: .alert)
-        
-        alert.addAction(UIAlertAction(title: "Очистить", style: .default, handler: nil))
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
-        
-        self.present(alert, animated: true)
-    }
-    
     private func didTapAllExchangers() {
         let vc = RatingExchangersViewController()
         navigationController?.pushViewController(vc, animated: true)
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Профиль", style: .plain, target: nil, action: nil)
     }
     
     private func didTapConverter() {
         let vc = ConverterViewController()
         navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    private func didTapAbout() {
-        let safariViewController = SFSafariViewController(url: URL(string: "https://wellcrypto.io/ru/about/")!)
-        present(safariViewController, animated: true, completion: nil)
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Профиль", style: .plain, target: nil, action: nil)
     }
     
     private func didTapAdditionalInformation() {
         let vc = AdditionalInformation()
         navigationController?.pushViewController(vc, animated: true)
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Профиль", style: .plain, target: nil, action: nil)
+    }
+    
+    private func didTapAbout() {
+        let safariViewController = SFSafariViewController(url: URL(string: "https://wellcrypto.io/ru/about/")!)
+        present(safariViewController, animated: true, completion: nil)
     }
 }
 
@@ -141,6 +142,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+       
         cell.imageView?.image = UIImage(systemName: data[indexPath.section][indexPath.row].image)
         cell.textLabel?.text = data[indexPath.section][indexPath.row].title
         
@@ -164,6 +166,6 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let header = view as! UITableViewHeaderFooterView
-        header.textLabel?.font =  UIFont.boldSystemFont(ofSize: 13.0)
+        header.textLabel?.font =  UIFont.boldSystemFont(ofSize: 10)
     }
 }

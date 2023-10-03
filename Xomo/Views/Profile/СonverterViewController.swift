@@ -7,22 +7,23 @@ import UIKit
 
 class ConverterViewController: BaseController {
     
-    let service = ParseConverter.shared
+    private let service = ParseConverter.shared
     
     // MARK: UI
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 25)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: 20)
         label.textAlignment = .center
+        label.numberOfLines = 0
         
-        label.text = "Конвертер по курсу ЦБ РФ"
+        label.text = "Конвертер валют по курсу ЦБ РФ"
         
         return label
     }()
     
-    let textFieldGiveEnter: UITextField = {
+    private lazy var textFieldGiveEnter: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.textAlignment = .center
@@ -38,7 +39,7 @@ class ConverterViewController: BaseController {
         return textField
     }()
     
-    let textFieldReceiveEnter: UITextField = {
+    private let textFieldReceiveEnter: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.textAlignment = .center
@@ -52,7 +53,7 @@ class ConverterViewController: BaseController {
         return textField
     }()
     
-    let textFieldGive: UITextField = {
+    private let textFieldGive: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.textAlignment = .center
@@ -61,12 +62,12 @@ class ConverterViewController: BaseController {
         textField.font = UIFont.boldSystemFont(ofSize: 14)
         textField.layer.cornerRadius = 10
         
-        textField.text = "USD"
+        textField.text = Resources.pickerModelConverter[0][1]
         
         return textField
     }()
     
-    let textFieldReceive: UITextField = {
+    private let textFieldReceive: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.textAlignment = .center
@@ -75,19 +76,19 @@ class ConverterViewController: BaseController {
         textField.font = UIFont.boldSystemFont(ofSize: 14)
         textField.layer.cornerRadius = 10
         
-        textField.text = "RUB"
+        textField.text = Resources.pickerModelConverter[1][0]
                 
         return textField
     }()
     
-    let pickerView: UIPickerView = {
+    private let pickerView: UIPickerView = {
         let pickerView = UIPickerView()
         pickerView.translatesAutoresizingMaskIntoConstraints = false
         
         return pickerView
     }()
     
-    let toolbar: UIToolbar = {
+    private let toolbar: UIToolbar = {
         let toolbar = UIToolbar()
         toolbar.barStyle = .default
         toolbar.isTranslucent = true
@@ -96,11 +97,15 @@ class ConverterViewController: BaseController {
         return toolbar
     }()
     
-    let doneButton = UIBarButtonItem(title: "Готово", style: .done, target: self, action: #selector(doneClick))
+    private lazy var doneButton = UIBarButtonItem(title: "Готово", style: .done, target: self, action: #selector(doneClick))
     
-    let imageViewArrow: UIImageView = {
+    private lazy var imageViewArrow: UIImageView = {
         let imageView = UIImageView()
+        imageView.isUserInteractionEnabled = true
         imageView.image = UIImage(systemName: "arrow.left.arrow.right", withConfiguration: UIImage.SymbolConfiguration(pointSize: 15, weight: .medium, scale: .large))
+        imageView.isUserInteractionEnabled = true
+        
+        imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageViewReverseTapped)))
         
         return imageView
     }()
@@ -120,7 +125,7 @@ class ConverterViewController: BaseController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.alignment = .leading
-        stackView.spacing = 20
+        stackView.spacing = 15
         
         return stackView
     }()
@@ -131,12 +136,13 @@ class ConverterViewController: BaseController {
         super.viewDidLoad()
         
         title = "Конвертер Валют"
-        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.largeTitleDisplayMode = .never
         
         textFieldReceiveEnter.delegate = self
         
         addSubview()
         setupLayout()
+        
         setupConverter()
         setupPickerView()
     }
@@ -163,22 +169,22 @@ class ConverterViewController: BaseController {
     private func setupLayout() {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            titleLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            titleLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             
-            vStackView.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 60),
-            vStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            vStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            vStackView.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 50),
+            vStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            vStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             
             textFieldGiveEnter.heightAnchor.constraint(equalToConstant: 40),
-            textFieldGiveEnter.widthAnchor.constraint(equalToConstant: view.frame.width - 40),
+            textFieldGiveEnter.widthAnchor.constraint(equalToConstant: view.frame.width - 32),
 
-            hStackView.widthAnchor.constraint(equalToConstant: view.frame.width - 40),
+            hStackView.widthAnchor.constraint(equalToConstant: view.frame.width - 32),
             hStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
-            textFieldGive.widthAnchor.constraint(equalToConstant: (view.frame.width - 40) / 2.2),
+            textFieldGive.widthAnchor.constraint(equalToConstant: (view.frame.width - 32) / 2.2),
             textFieldGive.heightAnchor.constraint(equalToConstant: 40),
 
             textFieldReceive.heightAnchor.constraint(equalToConstant: 40),
@@ -187,7 +193,7 @@ class ConverterViewController: BaseController {
             imageViewArrow.widthAnchor.constraint(equalToConstant: 30),
 
             textFieldReceiveEnter.heightAnchor.constraint(equalToConstant: 40),
-            textFieldReceiveEnter.widthAnchor.constraint(equalToConstant: view.frame.width - 40),
+            textFieldReceiveEnter.widthAnchor.constraint(equalToConstant: view.frame.width - 32),
         ])
     }
     
@@ -196,7 +202,11 @@ class ConverterViewController: BaseController {
     private func setupConverter() {
         service.parse(numGive: textFieldGiveEnter.text!, currencyGive: textFieldGive.text!, currencyReceive: textFieldReceive.text!) { _ in
             DispatchQueue.main.async {
-                self.textFieldReceiveEnter.text = self.service.numReceive
+                if self.service.numReceive != "" {
+                    self.textFieldReceiveEnter.text = self.service.numReceive
+                } else {
+                    self.textFieldReceiveEnter.text = "Ошибка"
+                }
             }
         }
     }
@@ -220,15 +230,24 @@ class ConverterViewController: BaseController {
         toolbar.isUserInteractionEnabled = true
     }
     
-    @objc func doneClick() {
+    // MARK: Functions
+    
+    @objc private func doneClick() {
         setupConverter()
         view.endEditing(true)
      }
     
-    @objc func textFieldDidChange() {
+    @objc private func textFieldDidChange() {
         setupConverter()
     }
     
+    @objc private func imageViewReverseTapped() {
+        let text = textFieldReceive.text
+        textFieldReceive.text = textFieldGive.text
+        textFieldGive.text = text
+        
+        setupConverter()
+    }
 }
 
 // MARK: Extension
@@ -286,15 +305,3 @@ extension ConverterViewController: UITextFieldDelegate {
         return false
     }
 }
-
-
-
-
-
-
-//view.backgroundColor = .black
-//        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Назад", style: .plain, target: self, action: #selector(didTapCancel))
-
-//    @objc private func didTapCancel() {
-//        dismiss(animated: true)
-//    }

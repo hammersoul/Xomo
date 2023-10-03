@@ -40,7 +40,7 @@ final class Resources {
             formatter.numberStyle = .decimal
             formatter.groupingSeparator = " "
             formatter.maximumFractionDigits = 2
-
+            
             let result = formatter.string(from: NSNumber(value: priceFormatter))
             
             return result ?? price
@@ -50,7 +50,7 @@ final class Resources {
     }
     
     // MARK: Picker Model Exchangers
-
+    
     static let pickerModelValue = [
         "Сбербанк RUB", "Bitcoin BTC", "QIWI RUB", "Tether USDT", "Тинькофф RUB", "Приват24 UAH", "Ethereum ETH", "Tron TRX", "ЮMoney RUB", "Litecoin LTC", "Dogecoin DOGE", "Monobank UAH", "Ripple XRP", "DASH", "Bitcoin BEP20 BTC", "Ethereum BEP20 ETH", "Ethereum Classic ETC", "Tether ERC USDT", "Tether BEP20 USDT", "Tether Omni USDT", "Bitcoin Cash BCH", "Bitcoin SV BSV", "Binance Coin BNB", "Binance Coin BEP20 BNB", "USD Coin USDC", "USD Coin ERC20 USDC", "Cardano ADA", "Monero XMR", "Stellar XLM", "EOS EOS", "Lisk LSK", "Qtum QTUM", "TrueUSD TUSD", "Verge XVG", "WAVES (WAVES)", "Zcash ZEC", "Decred DCR", "IOTA MIOTA", "NEM XEM", "Bitcoin Gold BTG", "OmiseGO OMG", "VeChain VET", "Pax Dollar USDP", "0x ZRX", "Basic Attention Token BAT", "Cosmos ATOM", "Chainlink LINK", "Tezos XTZ", "Komodo KMD", "ICON (ICX)", "Ontology ONT", "Polkadot DOT", "Algorand ALGO", "Uniswap UNI", "Binance USD BUSD", "Solana SOL", "SHIBA INU SHIB", "Polygon MATIC", "Polygon MATIC ERC20", "Decentraland MANA", "Avalanche AVAX", "AVAX C-Chain AVAXC", "AAVE", "KAVA", "Wrapped BTC ERC20 WBTC", "ApeCoin APE", "1inch Network 1INCH", "Aptos APT", "Fantom FTM", "BNB Smart Chain BSC",
         

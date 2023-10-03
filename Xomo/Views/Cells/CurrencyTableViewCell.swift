@@ -95,7 +95,7 @@ class CurrencyTableViewCell: UITableViewCell {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
-        stackView.alignment = .center
+        stackView.alignment = .trailing
         
         return stackView
     }()
@@ -141,8 +141,8 @@ class CurrencyTableViewCell: UITableViewCell {
             vStackViewThree.topAnchor.constraint(equalTo: hStackView.topAnchor, constant: 0),
             vStackViewThree.bottomAnchor.constraint(equalTo: hStackView.bottomAnchor, constant: 0),
             
-            vStackViewOne.widthAnchor.constraint(equalToConstant: containerView.frame.width / 2.0),
-            vStackViewTwo.widthAnchor.constraint(equalToConstant: containerView.frame.width / 2.5),
+            vStackViewOne.widthAnchor.constraint(equalToConstant: containerView.frame.width / 2.2),
+            vStackViewTwo.widthAnchor.constraint(equalToConstant: containerView.frame.width / 2.2),
         ])
     }
     

@@ -22,15 +22,19 @@ final class ParseConverter {
                 do {
                     let html = try String(contentsOf: url)
                     let document: Document = try SwiftSoup.parse(html)
-                    
+                                    
                     let elementReceive: Element = try document.getElementsByClass("converter-display__cross-block").select("div.converter-display__value").last()!
                     
                     self!.numReceive = try elementReceive.text()
                     
                     completion(self?.numReceive ?? "")
                 } catch {
-                    print("Error get info")
+                    self!.numReceive = ""
+                    completion("")
                 }
+            } else {
+                self!.numReceive = ""
+                completion("")
             }
         }
     }

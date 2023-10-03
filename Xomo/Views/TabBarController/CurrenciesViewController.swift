@@ -7,12 +7,12 @@ import UIKit
 
 class CurrenciesViewController: BaseController {
     
-    let service = ParseCurrencies.shared
-    let context = ContextDB.shared
+    private let service = ParseCurrencies.shared
+    private let context = ContextDB.shared
     
     // MARK: UI
     
-    var spinner = UIActivityIndicatorView(style: .medium)
+    private var spinner = UIActivityIndicatorView(style: .medium)
     
     private let tableView: UITableView = {
         let tableView = UITableView()
@@ -31,7 +31,7 @@ class CurrenciesViewController: BaseController {
         label.numberOfLines = 0
         label.isHidden = true
         
-        label.text = "Ошибка загрузки валют. Проверьте подключение к интернету."
+        label.text = "Произошла ошибка загрузки валют. Проверьте подключение к интернету."
         
         return label
     }()
@@ -57,6 +57,12 @@ class CurrenciesViewController: BaseController {
         setupTableView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tableView.reloadData()
+    }
+    
     // MARK: Subview
     
     private func addSubview() {
@@ -67,14 +73,10 @@ class CurrenciesViewController: BaseController {
     }
     
     // MARK: Layout Constraint
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        tableView.frame = view.bounds
-    }
-    
+
     private func setupLayout() {
+        tableView.frame = view.bounds
+        
         NSLayoutConstraint.activate([
             errorLabel.widthAnchor.constraint(equalToConstant: 250),
             errorLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -98,6 +100,10 @@ class CurrenciesViewController: BaseController {
         tableView.delegate = self
         tableView.dataSource = self
         
+        parseTableView()
+    }
+    
+    private func parseTableView() {
         spinner.startAnimating()
         tableView.backgroundView = spinner
         
@@ -111,11 +117,16 @@ class CurrenciesViewController: BaseController {
         }
     }
     
-    // MARK: Function
+    // MARK: Functions
     
     @objc private func refresh(sender: UIRefreshControl) {
         errorLabel.isHidden = true
-        setupTableView()
+        
+        if service.currencies.count == 0 {
+            parseTableView()
+        } else {
+            tableView.reloadData()
+        }
         
         sender.endRefreshing()
     }

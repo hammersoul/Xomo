@@ -126,8 +126,8 @@ class HomeTableViewCell: UITableViewCell {
     
     func setup(name: String, give: String, receive: String, reserve: String) {
         nameLabel.text = name
-        giveLabel.text = "Отдадите: " + give
-        receiveLabel.text = "Получите: " + receive
+        giveLabel.text = give
+        receiveLabel.text = receive
         reserveLabel.text = reserve        
     }
     

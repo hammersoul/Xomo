@@ -9,11 +9,11 @@ import UIScrollView_InfiniteScroll
 
 class NewsViewController: BaseController {
     
-    let service = ParseNews.shared
+    private let service = ParseNews.shared
     
     // MARK: UI
     
-    var spinner = UIActivityIndicatorView(style: .medium)
+    private var spinner = UIActivityIndicatorView(style: .medium)
     
     private let tableView: UITableView = {
         let tableView = UITableView()
@@ -31,7 +31,7 @@ class NewsViewController: BaseController {
         label.numberOfLines = 0
         label.isHidden = true
         
-        label.text = "Ошибка загрузки новостей. Проверьте подключение к интернету."
+        label.text = "Произошла ошибка загрузки новостей. Проверьте подключение к интернету."
         
         return label
     }()
@@ -67,13 +67,9 @@ class NewsViewController: BaseController {
     
     // MARK: Layout Constraint
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        tableView.frame = view.bounds
-    }
-    
     private func setupLayout() {
+        tableView.frame = view.bounds
+        
         NSLayoutConstraint.activate([
             errorLabel.widthAnchor.constraint(equalToConstant: 250),
             errorLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -99,6 +95,10 @@ class NewsViewController: BaseController {
         tableView.delegate = self
         tableView.dataSource = self
         
+        parseTableView()
+    }
+    
+    private func parseTableView() {
         spinner.startAnimating()
         tableView.backgroundView = spinner
         tableView.infiniteScrollDirection = .vertical
@@ -131,11 +131,16 @@ class NewsViewController: BaseController {
         }
     }
     
-    // MARK: Function
+    // MARK: Functions
     
     @objc private func refresh(sender: UIRefreshControl) {
         errorLabel.isHidden = true
-        setupTableView()
+        
+        if service.news.count == 0 {
+            parseTableView()
+        } else {
+            tableView.reloadData()
+        }
         
         sender.endRefreshing()
     }

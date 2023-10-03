@@ -196,8 +196,8 @@
 				71F2DA632AB06CA8005A0381 /* ParseCurrencies.swift */,
 				711E713F2AB6DFFF00EE7618 /* ParseExchangers.swift */,
 				718506562AC4305500382BBD /* ParseConverter.swift */,
-				718506502AC3531F00382BBD /* ParseInfo.swift */,
 				7185065A2AC4616C00382BBD /* ParseRatingExchangers.swift */,
+				718506502AC3531F00382BBD /* ParseInfo.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";

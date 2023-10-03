@@ -21,38 +21,38 @@ class RatingExchangersTableViewCell: UITableViewCell {
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 18.0)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: 14)
         
         return label
     }()
     
     private let reserveLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 16.0)
-        label.textColor = Resources.tabBarItemLight
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: 12)
+        label.textColor = Resources.tabBarItemLight
         
         return label
     }()
     
     private let statusLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 18.0)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: 14)
         
         return label
     }()
     
     private let reviewsLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 16.0)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: 12)
         
         return label
     }()
     
-    private let saveButton: UIButton = {
+    private lazy var saveButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         
@@ -63,7 +63,7 @@ class RatingExchangersTableViewCell: UITableViewCell {
     
     @objc func didTapButton(sender: UIButton) {
         saveButtonClick?()
-      }
+    }
     
     private let hStackView: UIStackView = {
         let stackView = UIStackView()
@@ -107,8 +107,6 @@ class RatingExchangersTableViewCell: UITableViewCell {
     // MARK: Subview
     
     private func addSubview() {
-        containerView.addSubview(hStackView)
-        
         hStackView.addArrangedSubview(vStackViewOne)
         hStackView.addArrangedSubview(vStackViewTwo)
         hStackView.addArrangedSubview(vStackViewThree)
@@ -118,8 +116,10 @@ class RatingExchangersTableViewCell: UITableViewCell {
         
         vStackViewTwo.addArrangedSubview(statusLabel)
         vStackViewTwo.addArrangedSubview(reviewsLabel)
+        
         vStackViewThree.addArrangedSubview(saveButton)
         
+        containerView.addSubview(hStackView)
         contentView.addSubview(containerView)
     }
     
@@ -127,25 +127,27 @@ class RatingExchangersTableViewCell: UITableViewCell {
     
     private func setupLayout() {
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            containerView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor),
+            containerView.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor),
             
-            hStackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 0),
-            hStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            hStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 0),
-            hStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 0),
+            hStackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 4),
+            hStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            hStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -4),
+            hStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
             
             vStackViewOne.topAnchor.constraint(equalTo: hStackView.topAnchor, constant: 0),
             vStackViewOne.bottomAnchor.constraint(equalTo: hStackView.bottomAnchor, constant: 0),
+            
             vStackViewTwo.topAnchor.constraint(equalTo: hStackView.topAnchor, constant: 0),
             vStackViewTwo.bottomAnchor.constraint(equalTo: hStackView.bottomAnchor, constant: 0),
+            
             vStackViewThree.topAnchor.constraint(equalTo: hStackView.topAnchor, constant: 0),
             vStackViewThree.bottomAnchor.constraint(equalTo: hStackView.bottomAnchor, constant: 0),
             
-            vStackViewOne.widthAnchor.constraint(equalToConstant: containerView.frame.width / 2.0),
-            vStackViewTwo.widthAnchor.constraint(equalToConstant: containerView.frame.width / 2.5),
+            vStackViewOne.widthAnchor.constraint(equalToConstant: containerView.frame.width / 2.2),
+            vStackViewTwo.widthAnchor.constraint(equalToConstant: containerView.frame.width / 2.2),
         ])
     }
     
@@ -157,6 +159,11 @@ class RatingExchangersTableViewCell: UITableViewCell {
         reserveLabel.text = reserve
         reviewsLabel.text = reviews
         
+        checkUI(status: status, checkButton: checkButton)
+    }
+    
+    // Check UI
+    private func checkUI(status: String, checkButton: Bool) {
         if status == "Не работает" {
             statusLabel.textColor = #colorLiteral(red: 0.7882352941, green: 0.3215686275, blue: 0.3647058824, alpha: 1)
         } else {

@@ -30,7 +30,7 @@ class HistoryViewController: BaseController {
         label.numberOfLines = 0
         label.isHidden = true
         
-        label.text = "История переходов на обменники пуста"
+        label.text = "История переходов на обменники пуста."
         
         return label
     }()
@@ -49,6 +49,13 @@ class HistoryViewController: BaseController {
         setupTableView()
     }
     
+    //MARK: Subview
+    
+    private func addSubview() {
+        view.addSubview(tableView)
+        view.addSubview(errorLabel)
+    }
+    
     // MARK: ViewWillAppeear
     
     override func viewWillAppear(_ animated: Bool) {
@@ -56,13 +63,6 @@ class HistoryViewController: BaseController {
         
         tableView.reloadData()
         errorShow()
-    }
-    
-    //MARK: Subview
-    
-    private func addSubview() {
-        view.addSubview(tableView)
-        view.addSubview(errorLabel)
     }
     
     // MARK: Layout Constraint
@@ -89,24 +89,26 @@ class HistoryViewController: BaseController {
     private func errorShow() {
         if ContextDB.shared.allHistory().count == 0 {
             errorLabel.isHidden = false
+            navigationItem.rightBarButtonItem?.isEnabled = false
         } else {
             errorLabel.isHidden = true
+            navigationItem.rightBarButtonItem?.isEnabled = true
             
             spinner.startAnimating()
             tableView.backgroundView = spinner
         }
     }
     
-    // MARK: Function
+    // MARK: Functions
     
-    @objc func deletetTapped() {
+    @objc private func deletetTapped() {
         let alert = UIAlertController(title: "Вы точно хотите очистить всю историю переходов на обменники?", message: nil, preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "Очистить", style: .default, handler: { [self]_ in
             ContextDB.shared.deleteAllHistory()
             
             tableView.reloadData()
-            errorLabel.isHidden = false
+            errorShow()
         }))
         alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
         

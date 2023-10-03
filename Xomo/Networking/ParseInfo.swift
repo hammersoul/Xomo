@@ -25,15 +25,19 @@ final class ParseInfo {
                     let elementsTitle: Elements = try document.getElementsByClass("news-name")
                     let elementsURL: Elements = try document.getElementsByClass("news-link")
                     
-                    for index in 0..<elementsTitle.count {
-                        let oneInfo = try InfoModel(title: elementsTitle[index].text(), url: "https://bits.media" + elementsURL[index].attr("href"))
+                    if (elementsTitle.count == elementsURL.count) {
+                        for index in 0..<elementsTitle.count {
+                            let oneInfo = try InfoModel(title: elementsTitle[index].text(), url: "https://bits.media" + elementsURL[index].attr("href"))
+                            
+                            self?.info.append(oneInfo)
+                        }
                         
-                        self?.info.append(oneInfo)
+                        completion(self?.info ?? [])
+                    } else {
+                        completion([])
                     }
-                    
-                    completion(self?.info ?? [])
                 } catch {
-                    print("Error get info")
+                    completion([])
                 }
             }
         }

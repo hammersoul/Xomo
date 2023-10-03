@@ -10,22 +10,29 @@ class FavoritesExchangersViewController: BaseController {
     
     // MARK: UI
     
-    private let spinner = UIActivityIndicatorView(style: .large)
+    private let spinner = UIActivityIndicatorView(style: .medium)
     
     private let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(RatingExchangersTableViewCell.self, forCellReuseIdentifier: RatingExchangersTableViewCell.identifier)
-        tableView.rowHeight = 70
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.register(RatingExchangersTableViewCell.self, forCellReuseIdentifier: RatingExchangersTableViewCell.identifier)
+        tableView.rowHeight = 55
         
         return tableView
     }()
     
-    private let refreshControl: UIRefreshControl = {
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refresh(sender:)), for: .valueChanged)
+    private let errorLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.textColor = Resources.tabBarItemLight
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.isHidden = true
         
-        return refreshControl
+        label.text = "Вы ещё не сохранили ни одного обменника."
+        
+        return label
     }()
     
     // MARK: ViewDidLoad
@@ -33,26 +40,42 @@ class FavoritesExchangersViewController: BaseController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Твои Обменники"
-        navigationController?.navigationBar.prefersLargeTitles = false
+        title = "Ваши Обменники"
+        navigationItem.largeTitleDisplayMode = .never
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Очистить", style: .plain, target: self, action: #selector(deletetTapped))
         
         addSubview()
         setupLayout()
+        
         setupTableView()
     }
     
     //MARK: Subview
     
     private func addSubview() {
-        tableView.addSubview(refreshControl)
         view.addSubview(tableView)
+        view.addSubview(errorLabel)
+    }
+    
+    // MARK: ViewWillAppeear
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tableView.reloadData()
+        errorShow()
     }
     
     // MARK: Layout Constraint
     
     private func setupLayout() {
         tableView.frame = view.bounds
+        
+        NSLayoutConstraint.activate([
+            errorLabel.widthAnchor.constraint(equalToConstant: 250),
+            errorLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
     }
     
     // MARK: Setup TableView
@@ -62,17 +85,31 @@ class FavoritesExchangersViewController: BaseController {
         tableView.dataSource = self
     }
     
-    @objc private func refresh(sender: UIRefreshControl) {
-        tableView.reloadData()
-        sender.endRefreshing()
+    // MARK: Error Label
+    
+    private func errorShow() {
+        if ContextDB.shared.allRatingExchangers().count == 0 {
+            errorLabel.isHidden = false
+            navigationItem.rightBarButtonItem?.isEnabled = false
+        } else {
+            errorLabel.isHidden = true
+            navigationItem.rightBarButtonItem?.isEnabled = true
+            
+            spinner.startAnimating()
+            tableView.backgroundView = spinner
+        }
     }
     
-    @objc func deletetTapped() {
-        let alert = UIAlertController(title: "Вы точно хотите очистить избранные обменники?", message: nil, preferredStyle: .alert)
+    // MARK: Functions
+    
+    @objc private func deletetTapped() {
+        let alert = UIAlertController(title: "Вы точно хотите очистить все избранные обменники?", message: nil, preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "Очистить", style: .default, handler: { [self]_ in 
             ContextDB.shared.deleteAllExchangers()
+            
             tableView.reloadData()
+            errorLabel.isHidden = false
         }))
         alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
         
@@ -89,14 +126,17 @@ extension FavoritesExchangersViewController: UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let index = ContextDB.shared.allRatingExchangers()[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: RatingExchangersTableViewCell.identifier, for: indexPath) as! RatingExchangersTableViewCell
         cell.selectionStyle = .none
         
-        cell.setup(name: ContextDB.shared.allRatingExchangers()[indexPath.row].name!, status: ContextDB.shared.allRatingExchangers()[indexPath.row].status!, reserve: ContextDB.shared.allRatingExchangers()[indexPath.row].reserve!, reviews: ContextDB.shared.allRatingExchangers()[indexPath.row].reviews!, checkButton: true)
+        cell.setup(name: index.name ?? "", status: index.status ?? "", reserve: index.reserve ?? "", reviews: index.reviews ?? "", checkButton: true)
+        spinner.stopAnimating()
         
         cell.saveButtonClick = {
             ContextDB.shared.deleteExchanger(name: ContextDB.shared.allRatingExchangers()[indexPath.row].name!)
             tableView.reloadData()
+            self.errorShow()
         }
         
         return cell
@@ -109,5 +149,11 @@ extension FavoritesExchangersViewController: UITableViewDelegate, UITableViewDat
             let safariViewController = SFSafariViewController(url: url)
             present(safariViewController, animated: true, completion: nil)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection
+                   section: Int) -> String? {
+        
+        return ContextDB.shared.allRatingExchangers().count != 0 ? "Сохраненные обменники" : ""
     }
 }

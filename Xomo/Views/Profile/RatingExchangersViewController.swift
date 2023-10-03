@@ -8,25 +8,39 @@ import SafariServices
 
 class RatingExchangersViewController: BaseController {
     
-    let service = ParseRatingExchangers.shared
+    private let service = ParseRatingExchangers.shared
     
     // MARK: UI
     
-    var spinner = UIActivityIndicatorView(style: .large)
+    private var spinner = UIActivityIndicatorView(style: .medium)
     
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(RatingExchangersTableViewCell.self, forCellReuseIdentifier: RatingExchangersTableViewCell.identifier)
-        tableView.rowHeight = 70
+        tableView.rowHeight = 55
         
         return tableView
     }()
     
-    private let refreshControl: UIRefreshControl = {
+    private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh(sender:)), for: .valueChanged)
         
         return refreshControl
+    }()
+    
+    private let errorLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.textColor = Resources.tabBarItemLight
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.isHidden = true
+        
+        label.text = "Произошла ошибка загрузки рейтинга обменников. Проверьте подключение к интернету."
+        
+        return label
     }()
     
     // MARK: ViewDidLoad
@@ -34,10 +48,12 @@ class RatingExchangersViewController: BaseController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Все Обменники"
-        navigationController?.navigationBar.prefersLargeTitles = false
+        title = "Рейтинг Обменников"
+        navigationItem.largeTitleDisplayMode = .never
         
         addSubview()
+        setupLayout()
+        
         setupTableView()
     }
     
@@ -45,15 +61,21 @@ class RatingExchangersViewController: BaseController {
     
     private func addSubview() {
         view.addSubview(tableView)
+        view.addSubview(errorLabel)
+        
         tableView.addSubview(refreshControl)
     }
     
     // MARK: Layout Constraint
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
+    private func setupLayout() {
         tableView.frame = view.bounds
+        
+        NSLayoutConstraint.activate([
+            errorLabel.widthAnchor.constraint(equalToConstant: 250),
+            errorLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
     }
     
     // MARK: Setup TableView
@@ -62,19 +84,44 @@ class RatingExchangersViewController: BaseController {
         tableView.delegate = self
         tableView.dataSource = self
         
+        parseTableView()
+    }
+    
+    private func parseTableView() {
         spinner.startAnimating()
         tableView.backgroundView = spinner
         
         service.parse { _ in
             DispatchQueue.main.async {
                 self.tableView.reloadData()
+                
                 self.spinner.stopAnimating()
+                self.errorShow()
             }
         }
     }
     
+    // MARK: Error Label
+    
+    private func errorShow() {
+        if service.ratingExchangers.count == 0 {
+            errorLabel.isHidden = false
+        } else {
+            errorLabel.isHidden = true
+        }
+    }
+    
+    // MARK: Functions
+    
     @objc private func refresh(sender: UIRefreshControl) {
-        tableView.reloadData()
+        errorLabel.isHidden = true
+        
+        if service.ratingExchangers.count == 0 {
+            parseTableView()
+        } else {
+            tableView.reloadData()
+        }
+        
         sender.endRefreshing()
     }
 }
@@ -88,28 +135,26 @@ extension RatingExchangersViewController: UITableViewDelegate, UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let index = service.ratingExchangers[indexPath.row]
+        let context = ContextDB.shared
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: RatingExchangersTableViewCell.identifier, for: indexPath) as! RatingExchangersTableViewCell
         cell.selectionStyle = .none
         
-        let checkExchanger = ContextDB.shared.checkExchanger(name: service.ratingExchangers[indexPath.row].name)
+        let checkExchanger = context.checkExchanger(name: index.name)
         
-        cell.setup(name: service.ratingExchangers[indexPath.row].name, status: service.ratingExchangers[indexPath.row].status, reserve: service.ratingExchangers[indexPath.row].reserve, reviews: service.ratingExchangers[indexPath.row].reviews, checkButton: checkExchanger)
-        cell.saveButtonClick = { [self] in
+        cell.setup(name: index.name, status: index.status, reserve: index.reserve, reviews: index.reviews, checkButton: checkExchanger)
+        cell.saveButtonClick = {
             if checkExchanger {
-                ContextDB.shared.deleteExchanger(name: service.ratingExchangers[indexPath.row].name)
+                context.deleteExchanger(name: index.name)
             } else {
-                ContextDB.shared.createExchanger(exchanger: service.ratingExchangers[indexPath.row])
+                context.createExchanger(exchanger: index)
             }
             
             tableView.reloadData()
         }
         
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection
-                   section: Int) -> String? {
-        return "Источник: wellcryto.io"
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -119,5 +164,11 @@ extension RatingExchangersViewController: UITableViewDelegate, UITableViewDataSo
             let safariViewController = SFSafariViewController(url: url)
             present(safariViewController, animated: true, completion: nil)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection
+                   section: Int) -> String? {
+        
+        return service.ratingExchangers.count != 0 ? "Весь рейтинг обменников" : ""
     }
 }

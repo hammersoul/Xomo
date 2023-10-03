@@ -8,17 +8,24 @@ import SafariServices
 
 class HomeViewController: BaseController {
     
-    let service = ParseExchangers.shared
+    private let service = ParseExchangers.shared
     
     // MARK: UI
     
-    private let spinner = UIActivityIndicatorView(style: .medium)
+    private let spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView()
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        spinner.style = .medium
+        
+        return spinner
+    }()
     
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.identifier)
         tableView.rowHeight = 55
+        tableView.isHidden = true
         
         return tableView
     }()
@@ -32,12 +39,12 @@ class HomeViewController: BaseController {
         label.numberOfLines = 0
         label.isHidden = true
         
-        label.text = "Ошибка загрузки обменников. Проверьте подключение к интернету или измените запрос."
+        label.text = "Произошла ошибка загрузки обменников. Проверьте подключение к интернету или измените запрос."
         
         return label
     }()
     
-    let textFieldGive: UITextField = {
+    private let textFieldGive: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.textAlignment = .center
@@ -51,7 +58,7 @@ class HomeViewController: BaseController {
         return textField
     }()
     
-    let textFieldReceive: UITextField = {
+    private let textFieldReceive: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.textAlignment = .center
@@ -65,14 +72,14 @@ class HomeViewController: BaseController {
         return textField
     }()
     
-    let pickerView: UIPickerView = {
+    private let pickerView: UIPickerView = {
         let pickerView = UIPickerView()
         pickerView.translatesAutoresizingMaskIntoConstraints = false
         
         return pickerView
     }()
     
-    let toolbar: UIToolbar = {
+    private let toolbar: UIToolbar = {
         let toolbar = UIToolbar()
         toolbar.barStyle = .default
         toolbar.isTranslucent = true
@@ -81,7 +88,7 @@ class HomeViewController: BaseController {
         return toolbar
     }()
     
-    lazy var imageViewReverse: UIImageView = {
+    private lazy var imageViewReverse: UIImageView = {
         let imageView = UIImageView()
         imageView.isUserInteractionEnabled = true
         imageView.image = UIImage(systemName: "arrow.left.arrow.right", withConfiguration: UIImage.SymbolConfiguration(pointSize: 15, weight: .medium, scale: .large))
@@ -123,6 +130,7 @@ class HomeViewController: BaseController {
         hStackView.addArrangedSubview(imageViewReverse)
         hStackView.addArrangedSubview(textFieldReceive)
         
+        view.addSubview(spinner)
         view.addSubview(hStackView)
         view.addSubview(tableView)
         view.addSubview(errorLabel)
@@ -151,7 +159,10 @@ class HomeViewController: BaseController {
             
             errorLabel.widthAnchor.constraint(equalToConstant: 250),
             errorLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     
@@ -179,10 +190,7 @@ class HomeViewController: BaseController {
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        
-        spinner.startAnimating()
-        tableView.backgroundView = spinner
-        
+                
         doneClick()
     }
     
@@ -196,12 +204,16 @@ class HomeViewController: BaseController {
         }
     }
     
-    // MARK: Function
+    // MARK: Functions
     
-    lazy var doneButton = UIBarButtonItem(title: "Готово", style: .done, target: self, action: #selector(doneClick))
+    private lazy var doneButton = UIBarButtonItem(title: "Готово", style: .done, target: self, action: #selector(doneClick))
     
     @objc func doneClick() {
         view.endEditing(true)
+        
+        errorLabel.isHidden = true
+        tableView.isHidden = true
+        spinner.startAnimating()
         
         if let keyGive = Resources.pickerModelDictionary.first(where: { $0.value == textFieldGive.text! })?.key {
             if let keyReceive = Resources.pickerModelDictionary.first(where: { $0.value == textFieldReceive.text! })?.key {
@@ -209,6 +221,8 @@ class HomeViewController: BaseController {
                 
                 service.parse(completion: { _ in
                     DispatchQueue.main.async {
+                        self.tableView.isHidden = false
+                        
                         self.tableView.reloadData()
                         self.spinner.stopAnimating()
                         
@@ -239,7 +253,7 @@ class HomeViewController: BaseController {
     }
 }
 
-// MARK: Extension
+// MARK: Extensions
 
 extension HomeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -305,7 +319,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource, UIScro
         let index = service.exchangers[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.identifier, for: indexPath) as! HomeTableViewCell
         
-        cell.setup(name: index.name, give: Resources.formatterPrice(price: index.give) + " " + service.giveCurrency, receive: Resources.formatterPrice(price: index.receive) + " " + service.receiveCurrency, reserve: index.reserve)
+        cell.setup(name: index.name, give: "Отдадите: " + Resources.formatterPrice(price: index.give) + " " + service.giveCurrency, receive: "Получите: " + Resources.formatterPrice(price: index.receive) + " " + service.receiveCurrency, reserve: index.reserve)
         
         return cell
     }
@@ -315,7 +329,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource, UIScro
         let index = service.exchangers[indexPath.row]
         
         if let url = URL(string: index.url) {
-            ContextDB.shared.createHistory(name: index.name, give: Resources.formatterPrice(price: index.give) + " " + service.giveCurrency, receive: Resources.formatterPrice(price: index.receive) + " " + service.receiveCurrency, reserve: index.reserve, url: index.url)
+            ContextDB.shared.createHistory(name: index.name, give: "Отдали: " + Resources.formatterPrice(price: index.give) + " " + service.giveCurrency, receive: "Получили: " + Resources.formatterPrice(price: index.receive) + " " + service.receiveCurrency, reserve: index.reserve, url: index.url)
             
             let safariViewController = SFSafariViewController(url: url)
             present(safariViewController, animated: true, completion: nil)
