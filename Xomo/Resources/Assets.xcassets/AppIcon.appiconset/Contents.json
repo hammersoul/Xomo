@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "notification-icon@2x.png",
+      "filename" : "icon-40.png",
       "idiom" : "universal",
       "platform" : "ios",
       "scale" : "2x",
@@ -15,56 +15,56 @@
       "size" : "20x20"
     },
     {
-      "filename" : "Icon-Small@2x.png",
+      "filename" : "icon-small@2x 1.png",
       "idiom" : "universal",
       "platform" : "ios",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
-      "filename" : "Icon-Small@3x.png",
+      "filename" : "icon-small@3x 1.png",
       "idiom" : "universal",
       "platform" : "ios",
       "scale" : "3x",
       "size" : "29x29"
     },
     {
-      "filename" : "Icon-76.png",
+      "filename" : "icon-76.png",
       "idiom" : "universal",
       "platform" : "ios",
       "scale" : "2x",
       "size" : "38x38"
     },
     {
-      "filename" : "Icon@2x 8.png",
+      "filename" : "icon@2x 1.png",
       "idiom" : "universal",
       "platform" : "ios",
       "scale" : "3x",
       "size" : "38x38"
     },
     {
-      "filename" : "icon-40@2x.png",
+      "filename" : "Icon-Small-40@2x 3.png",
       "idiom" : "universal",
       "platform" : "ios",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
-      "filename" : "icon-40@3x.png",
+      "filename" : "Icon-60@2x 1.png",
       "idiom" : "universal",
       "platform" : "ios",
       "scale" : "3x",
       "size" : "40x40"
     },
     {
-      "filename" : "icon-60@2x.png",
+      "filename" : "logo~universal@1x 2.png",
       "idiom" : "universal",
       "platform" : "ios",
       "scale" : "2x",
       "size" : "60x60"
     },
     {
-      "filename" : "Icon-60@3x.png",
+      "filename" : "Icon-60@3x 1.png",
       "idiom" : "universal",
       "platform" : "ios",
       "scale" : "3x",
@@ -78,28 +78,28 @@
       "size" : "64x64"
     },
     {
-      "filename" : "logo-2~universal@1x.png",
+      "filename" : "logo~universal@1x.png",
       "idiom" : "universal",
       "platform" : "ios",
       "scale" : "3x",
       "size" : "64x64"
     },
     {
-      "filename" : "logo-2~universal@1x 1.png",
+      "filename" : "logo~universal@1x 1.png",
       "idiom" : "universal",
       "platform" : "ios",
       "scale" : "2x",
       "size" : "68x68"
     },
     {
-      "filename" : "icon-76@2x.png",
+      "filename" : "Icon-76@2x 4.png",
       "idiom" : "universal",
       "platform" : "ios",
       "scale" : "2x",
       "size" : "76x76"
     },
     {
-      "filename" : "icon-83.5@2x.png",
+      "filename" : "Icon-83.5@2x.png",
       "idiom" : "universal",
       "platform" : "ios",
       "scale" : "2x",
