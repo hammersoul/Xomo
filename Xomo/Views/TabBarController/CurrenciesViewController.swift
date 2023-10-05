@@ -100,20 +100,24 @@ class CurrenciesViewController: BaseController {
         tableView.delegate = self
         tableView.dataSource = self
         
-        parseTableView()
-    }
-    
-    private func parseTableView() {
         spinner.startAnimating()
         tableView.backgroundView = spinner
         
-        service.parse { _ in
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-                self.spinner.stopAnimating()
-                
-                self.errorShow()
+        if service.currencies.count == 0 {
+            service.parse { _ in
+                self.parseTableView()
             }
+        } else {
+            parseTableView()
+        }
+    }
+    
+    private func parseTableView() {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            self.spinner.stopAnimating()
+            
+            self.errorShow()
         }
     }
     
@@ -123,7 +127,9 @@ class CurrenciesViewController: BaseController {
         errorLabel.isHidden = true
         
         if service.currencies.count == 0 {
-            parseTableView()
+            service.parse { _ in
+                self.parseTableView()
+            }
         } else {
             tableView.reloadData()
         }

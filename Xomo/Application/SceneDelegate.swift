@@ -12,11 +12,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        
-        let tabBarController = TabBarController()
-        
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = tabBarController
+
+        let controller: UIViewController!
+        
+        if UserDefaults.standard.bool(forKey: "BoolOnboardingViewController") == false {
+            controller = OnboardingViewController()
+            UserDefaults.standard.setValue(true, forKey: "BoolOnboardingViewController")
+        } else {
+            let tabBarController = TabBarController()
+            controller = tabBarController
+        }
+        
+        window?.rootViewController = controller
         window?.makeKeyAndVisible()
     }
 }

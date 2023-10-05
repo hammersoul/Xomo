@@ -30,7 +30,7 @@ class RatingExchangersTableViewCell: UITableViewCell {
     private let reserveLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 12)
+        label.font = UIFont.systemFont(ofSize: 12)
         label.textColor = Resources.tabBarItemLight
         
         return label

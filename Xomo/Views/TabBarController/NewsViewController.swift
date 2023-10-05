@@ -95,22 +95,26 @@ class NewsViewController: BaseController {
         tableView.delegate = self
         tableView.dataSource = self
         
-        parseTableView()
-    }
-    
-    private func parseTableView() {
         spinner.startAnimating()
         tableView.backgroundView = spinner
         tableView.infiniteScrollDirection = .vertical
         
-        service.parse(completion: { _ in
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-                self.spinner.stopAnimating()
-                
-                self.errorShow()
-            }
-        }, page: self.service.page)
+        if service.news.count == 0 {
+            service.parse(completion: { _ in
+                self.parseTableView()
+            }, page: self.service.page)
+        } else {
+            parseTableView()
+        }
+    }
+    
+    private func parseTableView() {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            self.spinner.stopAnimating()
+            
+            self.errorShow()
+        }
     }
     
     // Navigate pages
@@ -137,7 +141,9 @@ class NewsViewController: BaseController {
         errorLabel.isHidden = true
         
         if service.news.count == 0 {
-            parseTableView()
+            service.parse(completion: { _ in
+                self.parseTableView()
+            }, page: self.service.page)
         } else {
             tableView.reloadData()
         }

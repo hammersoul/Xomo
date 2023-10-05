@@ -24,7 +24,7 @@ final class ParseExchangers {
                 do {
                     let html = try String(contentsOf: url)
                     let document: Document = try SwiftSoup.parse(html)
-                    
+                                        
                     let elementsName: Elements = try document.getElementsByClass("exchange__title")
                     let elementGive: Elements = try document.getElementsByClass("exchange__send")
                     let elementReceive: Elements = try document.getElementsByClass("exchange__receive")

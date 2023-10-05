@@ -11,6 +11,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        DispatchQueue.global(qos: .userInteractive).async { ParseExchangers.shared.parse(completion: { _ in }, exchanger: "SBERRUB-BTC/") }
+        
+        do {
+            sleep(2)
+        }
+        
+        DispatchQueue.global(qos: .utility).async { ParseCurrencies.shared.parse { _ in } }
+        DispatchQueue.global(qos: .utility).async { ParseRatingExchangers.shared.parse { _ in } }
+        DispatchQueue.global(qos: .background).async { ParseNews.shared.parse(completion: { _ in }, page: ParseNews.shared.page) }
+        DispatchQueue.global(qos: .background).async { ParseInfo.shared.parse { _ in } }
+        
         return true
     }
 

@@ -5,7 +5,7 @@
 
 import UIKit
 
-class StartViewController: UIViewController {
+class OnboardingViewController: UIViewController {
     
     // MARK: UI
     
@@ -38,13 +38,14 @@ class StartViewController: UIViewController {
         return label
     }()
 
-    private let continueButton: UIButton = {
+    private lazy var continueButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 10
 
         button.setTitle("Продложить", for: .normal)
+        button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
 
         return button
     }()
@@ -63,6 +64,7 @@ class StartViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.alignment = .leading
+        stackView.spacing = 15
                         
         return stackView
     }()
@@ -85,11 +87,10 @@ class StartViewController: UIViewController {
         hStackViewLogoName.addArrangedSubview(nameLabel)
         
         vStackView.addArrangedSubview(hStackViewLogoName)
-        
         vStackView.addArrangedSubview(textLabel)
-        vStackView.addArrangedSubview(continueButton)
         
         view.addSubview(vStackView)
+        view.addSubview(continueButton)
     }
     
     // MARK: Layout Constraint
@@ -100,14 +101,23 @@ class StartViewController: UIViewController {
             logoImageView.widthAnchor.constraint(equalToConstant: 80),
             
             vStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            vStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            vStackView.bottomAnchor.constraint(equalTo: continueButton.topAnchor, constant: -120),
             vStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             
-            textLabel.topAnchor.constraint(equalTo: hStackViewLogoName.bottomAnchor, constant: 15),
-            textLabel.bottomAnchor.constraint(equalTo: continueButton.topAnchor, constant: -120),
-            
             continueButton.heightAnchor.constraint(equalToConstant: 55),
-            continueButton.widthAnchor.constraint(equalToConstant: view.frame.width - 32)
+            continueButton.widthAnchor.constraint(equalToConstant: view.frame.width - 32),
+            continueButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            continueButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         ])
+    }
+    
+    // MARK: Function
+    
+    @objc private func buttonTapped() {
+        let controller = TabBarController()
+        controller.modalPresentationStyle = .fullScreen
+        controller.modalTransitionStyle = .flipHorizontal
+                
+        present(controller, animated: true)
     }
 }

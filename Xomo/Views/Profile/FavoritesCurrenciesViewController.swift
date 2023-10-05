@@ -100,21 +100,25 @@ class FavoritesCurrenciesViewController: BaseController {
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-
-        parseTableView()
+        
+        spinner.startAnimating()
+        
+        if ParseCurrencies.shared.currencies.count == 0 {
+            ParseCurrencies.shared.parse { _ in
+                self.parseTableView()
+            }
+        } else {
+            parseTableView()
+        }
     }
     
     private func parseTableView() {
-        spinner.startAnimating()
-        
-        ParseCurrencies.shared.parse { _ in
-            DispatchQueue.main.async {
-                self.tableView.isHidden = false
-                
-                self.tableView.reloadData()
-                self.spinner.stopAnimating()
-                self.errorShow()
-            }
+        DispatchQueue.main.async {
+            self.tableView.isHidden = false
+            
+            self.tableView.reloadData()
+            self.spinner.stopAnimating()
+            self.errorShow()
         }
     }
     

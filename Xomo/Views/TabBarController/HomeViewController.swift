@@ -190,8 +190,25 @@ class HomeViewController: BaseController {
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-                
-        doneClick()
+        
+        if service.exchangers.count == 0 {
+            doneClick()
+        } else {
+            parseTableView()
+        }
+    }
+    
+    // MARK: Parse TableView
+    
+    private func parseTableView() {
+        DispatchQueue.main.async {
+            self.tableView.isHidden = false
+            
+            self.tableView.reloadData()
+            self.spinner.stopAnimating()
+            
+            self.errorShow()
+        }
     }
     
     // MARK: Error Label
@@ -220,14 +237,7 @@ class HomeViewController: BaseController {
                 service.exchangers.removeAll()
                 
                 service.parse(completion: { _ in
-                    DispatchQueue.main.async {
-                        self.tableView.isHidden = false
-                        
-                        self.tableView.reloadData()
-                        self.spinner.stopAnimating()
-                        
-                        self.errorShow()
-                    }
+                    self.parseTableView()
                 }, exchanger: keyGive + "-" + keyReceive + "/")
             }
         }

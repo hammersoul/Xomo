@@ -34,8 +34,6 @@ final class TabBarController: UITabBarController {
     private func appearanceTabBarController() {
         tabBar.backgroundColor = .secondarySystemBackground
         tabBar.unselectedItemTintColor = Resources.tabBarItemLight
-        
-        tabBar.layer.cornerRadius = 10
         tabBar.itemPositioning = .automatic
     }
     
