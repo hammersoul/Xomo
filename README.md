@@ -5,12 +5,10 @@
 
 ## Содержание
 - [Технологии](#технологии)
-- [Использование](#использование
+- [Использование](#использование)
 - [Источники](#источники)
 
 ## Технологии
-- [GatsbyJS](https://www.gatsbyjs.com/)
-- [TypeScript](https://www.typescriptlang.org/)
 - Swift 5
 - IOS 16.0
 - Xcode 14.0
@@ -130,7 +128,7 @@
 В каждую таблицу добавлен refrechControl, в любое время можно обновить таблицы для получения акутальных данных.
 
 ## Источники
-[Мониторинг и рейтинг обменников](https://wellcrypto.io/ru/exchangers/)
-[Новости по криптовалютам](https://bits.media)
-[Курсы криптовалют](https://crypto.com/price)
+[Мониторинг и рейтинг обменников](https://wellcrypto.io/ru/exchangers/) <br />
+[Новости по криптовалютам](https://bits.media) <br />
+[Курсы криптовалют](https://crypto.com/price) <br />
 [Конвертер валют](https://finance.rambler.ru/calculators/converter/)
