@@ -31,7 +31,7 @@
 
 <h3>Home Page</h3>
 <p>Первым что видит пользователей после LaunchScreen домашний экран - список обменников по выбранному направлению.</p>
-<img src="https://github.com/hammersoul/Xomo-Pet-Project/raw/main/App-Images/Home-Page .png" width="400">
+<img src="https://github.com/hammersoul/Xomo-Pet-Project/raw/main/App-Images/Home-Page.png" width="400">
 
 <h3>Возможность выбора направления </h3>
 <p>При завершении выбора таблица обновиться с новыми данными. </p>
@@ -64,11 +64,11 @@
 
 <h3>Подгрузка новостей</h3>
 <p>При переходе на NewsViewController таблица показывает 24 новости, при прокуртки вниз с помощью библиотеки UIScrollView_InfiniteScroll происходит подгрузка еще 24 новостей.</p>
-<img src="https://github.com/hammersoul/Xomo-Pet-Project/raw/main/App-Images/Loading-News.png.png" width="400">
+<img src="https://github.com/hammersoul/Xomo-Pet-Project/raw/main/App-Images/Loading-News.png" width="400">
 
 <h3>Переход к новости</h3>
 <p>Каждую новость можно открыть в источнике.</p>
-<img src="https://github.com/hammersoul/Xomo-Pet-Project/raw/main/App-Images/Go-to-News.png.png" width="400">
+<img src="https://github.com/hammersoul/Xomo-Pet-Project/raw/main/App-Images/Go-to-News.png" width="400">
 
 <h3>Профиль</h3>
 <p></p>
@@ -117,7 +117,7 @@
 <img src="https://github.com/hammersoul/Xomo-Pet-Project/raw/main/App-Images/Information.png" width="400">
 
 <h3>Переход к статье</h3>
-<img src="https://github.com/hammersoul/Xomo-Pet-Project/raw/main/App-Images/Go-to-Information.png.png" width="400">
+<img src="https://github.com/hammersoul/Xomo-Pet-Project/raw/main/App-Images/Go-to-Information.png" width="400">
 
 <h3>Светлая тема</h3>
 <p></p>
@@ -125,7 +125,7 @@
 
 <h3>Светлая тема</h3>
 <p></p>
-<img src="https://github.com/hammersoul/Xomo-Pet-Project/raw/main/App-Images/Light-Theme-Two.png.png" width="400">
+<img src="https://github.com/hammersoul/Xomo-Pet-Project/raw/main/App-Images/Light-Theme-Two.png" width="400">
 
 В каждую таблицу добавлен refrechControl, в любое время можно обновить таблицы для получения акутальных данных.
 

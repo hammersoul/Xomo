@@ -39,7 +39,7 @@ class HomeTableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 12)
-        
+            
         return label
     }()
     
@@ -47,7 +47,7 @@ class HomeTableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 12)
-        
+                
         return label
     }()
     

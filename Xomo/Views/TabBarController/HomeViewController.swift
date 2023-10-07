@@ -194,6 +194,9 @@ class HomeViewController: BaseController {
         if service.exchangers.count == 0 {
             doneClick()
         } else {
+            service.giveCurrency = "RUB"
+            service.receiveCurrency = "BTC"
+            
             parseTableView()
         }
     }
