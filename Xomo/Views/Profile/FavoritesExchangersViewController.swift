@@ -109,7 +109,7 @@ class FavoritesExchangersViewController: BaseController {
             ContextDB.shared.deleteAllExchangers()
             
             tableView.reloadData()
-            errorLabel.isHidden = false
+            errorShow()
         }))
         alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
         

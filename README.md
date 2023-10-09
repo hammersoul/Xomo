@@ -40,7 +40,7 @@
 <img src="https://github.com/hammersoul/Xomo-Pet-Project/raw/main/App-Images/Go-to-Exchangers.png" width="400">
 
 <h3>Ошибка</h3>
-<p>Информирование пользователе о некорректных введенных данных.</p>
+<p>Информирование пользователя о некорректных введенных данных.</p>
 <img src="https://github.com/hammersoul/Xomo-Pet-Project/raw/main/App-Images/Empty-Exchangers.png" width="400">
 
 <h3>История переходов</h3>
@@ -73,14 +73,14 @@
 <img src="https://github.com/hammersoul/Xomo-Pet-Project/raw/main/App-Images/Profile.png" width="400">
 
 <h3>Сохраненные курсы валют</h3>
-<p>Имеется возможноть общего удаление, так и одиночного. Так же в любой момент можно обновить таблицу (с помощью refreshControl) и получить актуальный курс валют.</p>
+<p>Имеется возможноть общего удаления и одиночного. Так же в любой момент можно обновить таблицу (с помощью refreshControl) и получить актуальный курс валют.</p>
 <img src="https://github.com/hammersoul/Xomo-Pet-Project/raw/main/App-Images/Save-Currencies.png" width="400">
 
 <h3>Одиночное удаление</h3>
 <img src="https://github.com/hammersoul/Xomo-Pet-Project/raw/main/App-Images/Deleting-One-Entry-Currencies.png" width="400">
 
 <h3>Общее удаление</h3>
-<p>При общем удалении также как и в истории появляется alertController для подтверждения.</p>
+<p>При общем удалении также как и в истории появляется alertController для подтверждения удаления всех записей.</p>
 <img src="https://github.com/hammersoul/Xomo-Pet-Project/raw/main/App-Images/Empty-Currencies.png" width="400">
 
 <h3>Empty Save Currencies</h3>
@@ -94,7 +94,7 @@
 <img src="https://github.com/hammersoul/Xomo-Pet-Project/raw/main/App-Images/Go-to-Rating-Exchangers.png" width="400">
 
 <h3>Общее удаление</h3>
-<p>Имеется возможноть общего удаление, так и одиночного.</p>
+<p>Имеется возможноть общего удаления и одиночного.</p>
 <img src="https://github.com/hammersoul/Xomo-Pet-Project/raw/main/App-Images/Clearing-Exchangers.png" width="400">
 
 <h3>Empty Save Exchangers</h3>
